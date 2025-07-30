@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment Canceled | Ameaozon{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card text-center">
+            <div class="card-body">
+                <div class="display-1 text-danger mb-3">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <h2 class="card-title">Payment Canceled</h2>
+                <p class="card-text">Your payment has been canceled. No charges were made.</p>
+                
+                <div class="alert alert-info mt-3">
+                    <h5>Order #{{ order.tracking_number }}</h5>
+                    <p>Your order is still saved. You can complete the payment later.</p>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="{% url 'payment:payment_process' order.tracking_number %}" class="btn btn-primary me-2">
+                        <i class="fas fa-credit-card"></i> Try Payment Again
+                    </a>
+                    <a href="{% url 'store:home' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-home"></i> Return to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Track Order | Ameaozon{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Track Your Order</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'orders:track_order' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="tracking_number" class="form-label">Enter Your Order Tracking Number</label>
+                        <input type="text" class="form-control" id="tracking_number" name="tracking_number" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Track Order</button>
+                </form>
+            </div>
+        </div>
+        
+        {% if recent_orders %}
+        <div class="card">
+            <div class="card-header">
+                <h3>Your Recent Orders</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Order #</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in recent_orders %}
+                            <tr>
+                                <td>{{ order.tracking_number }}</td>
+                                <td>{{ order.created_at|date:"M d, Y" }}</td>
+                                <td>
+                                    {% if order.status == 'pending' %}
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                    {% elif order.status == 'processing' %}
+                                    <span class="badge bg-info text-dark">Processing</span>
+                                    {% elif order.status == 'shipped' %}
+                                    <span class="badge bg-primary">Shipped</span>
+                                    {% elif order.status == 'delivered' %}
+                                    <span class="badge bg-success">Delivered</span>
+                                    {% elif order.status == 'cancelled' %}
+                                    <span class="badge bg-danger">Cancelled</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ order.total_price }} TK</td>
+                                <td>
+                                    <a href="{% url 'orders:track_order_detail' order.tracking_number %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-search"></i> Details
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
