@@ -1,0 +1,84 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}{{ title }} | Admin Dashboard{% endblock %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3">{{ title }}</h1>
+    <a href="{% url 'dashboard:carousel_list' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Carousel Images
+    </a>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="{{ form.image.id_for_label }}" class="form-label">Image</label>
+                {{ form.image }}
+                {% if form.image.errors %}
+                <div class="text-danger">
+                    {% for error in form.image.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <small class="form-text text-muted">Recommended size: 1200×400 pixels</small>
+                
+                {% if carousel_image and carousel_image.image %}
+                <div class="mt-2">
+                    <p>Current image:</p>
+                    <img src="{{ carousel_image.image.url }}" alt="{{ carousel_image.id }}" class="img-thumbnail" style="max-width: 300px;">
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label for="{{ form.link.id_for_label }}" class="form-label">Link URL</label>
+                {{ form.link }}
+                {% if form.link.errors %}
+                <div class="text-danger">
+                    {% for error in form.link.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <small class="form-text text-muted">Where should this carousel slide link to? (optional)</small>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="{{ form.order.id_for_label }}" class="form-label">Display Order</label>
+                        {{ form.order }}
+                        {% if form.order.errors %}
+                        <div class="text-danger">
+                            {% for error in form.order.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <small class="form-text text-muted">Lower numbers will be displayed first</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3 form-check pt-4">
+                        {{ form.is_active }}
+                        <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                            Active (visible on the website)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Carousel Image
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

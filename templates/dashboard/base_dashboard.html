@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard | Ameaozon{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom styles -->
+    <style>
+        body {
+            background-color: #f8f9fc;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background-color: #4e73df;
+            background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+            background-size: cover;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        .sidebar .nav-link:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .nav-link.active {
+            color: #fff;
+            font-weight: bold;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .sidebar .sidebar-heading {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            padding: 1rem;
+            margin-bottom: 0;
+        }
+        .card-header {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        .border-left-primary {
+            border-left: 4px solid #4e73df !important;
+        }
+        .border-left-success {
+            border-left: 4px solid #1cc88a !important;
+        }
+        .border-left-info {
+            border-left: 4px solid #36b9cc !important;
+        }
+        .border-left-warning {
+            border-left: 4px solid #f6c23e !important;
+        }
+        .border-left-danger {
+            border-left: 4px solid #e74a3b !important;
+        }
+    </style>
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar px-0 position-fixed">
+                <div class="text-center py-4">
+                    <a href="{% url 'store:home' %}" class="text-decoration-none">
+                        <h4 class="text-white">Ameaozon</h4>
+                    </a>
+                </div>
+                <hr class="sidebar-divider my-0 bg-light opacity-25">
+                <h6 class="sidebar-heading">Admin Panel</h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}" href="{% url 'dashboard:admin_dashboard' %}">
+                            <i class="fas fa-fw fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/dashboard/categories' in request.path %}active{% endif %}" href="{% url 'dashboard:category_list' %}">
+                            <i class="fas fa-fw fa-folder"></i> Categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/dashboard/subcategories' in request.path %}active{% endif %}" href="{% url 'dashboard:subcategory_list' %}">
+                            <i class="fas fa-fw fa-folder-open"></i> Subcategories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/dashboard/products' in request.path %}active{% endif %}" href="{% url 'dashboard:product_list' %}">
+                            <i class="fas fa-fw fa-box"></i> Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/dashboard/orders' in request.path %}active{% endif %}" href="{% url 'dashboard:order_list' %}">
+                            <i class="fas fa-fw fa-shopping-bag"></i> Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/dashboard/carousel' in request.path %}active{% endif %}" href="{% url 'dashboard:carousel_list' %}">
+                            <i class="fas fa-fw fa-images"></i> Carousel Images
+                        </a>
+                    </li>
+                </ul>
+                
+                <hr class="sidebar-divider my-0 bg-light opacity-25">
+                <h6 class="sidebar-heading">User</h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:profile' %}">
+                            <i class="fas fa-fw fa-user"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:logout' %}">
+                            <i class="fas fa-fw fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'store:home' %}">
+                            <i class="fas fa-fw fa-home"></i> Back to Shop
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 ms-auto px-4">
+                <div class="container-fluid py-4">
+                    <!-- Topbar -->
+                    <nav class="navbar navbar-expand navbar-light bg-white mb-4 shadow-sm">
+                        <div class="container-fluid">
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.user.username }}</span>
+                                        {% if request.user.profile_picture %}
+                                            <img class="img-profile rounded-circle" src="{{ request.user.profile_picture.url }}" width="32" height="32">
+                                        {% else %}
+                                            <i class="fas fa-user-circle fa-fw"></i>
+                                        {% endif %}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Profile</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                    
+                    <!-- Messages -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <!-- Page Content -->
+                    {% block dashboard_content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

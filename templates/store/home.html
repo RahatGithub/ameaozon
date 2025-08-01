@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Ameaozon - Pet Shop{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div id="homeCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for image in carousel_images %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        {% if image.link %}
+                        <a href="{{ image.link }}">
+                        {% endif %}
+                            <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ image.title }}">
+                        {% if image.link %}
+                        </a>
+                        {% endif %}
+                        
+                        {% if image.title or image.subtitle %}
+                        <div class="carousel-caption d-none d-md-block">
+                            {% if image.title %}<h2>{{ image.title }}</h2>{% endif %}
+                            {% if image.subtitle %}<p>{{ image.subtitle }}</p>{% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% empty %}
+                    <div class="carousel-item active">
+                        <img src="https://via.placeholder.com/1200x400?text=Welcome+to+Ameaozon+Pet+Shop" class="d-block w-100" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h2>Welcome to Ameaozon Pet Shop</h2>
+                            <p>Your one-stop destination for all pet needs</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Categories Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="text-center mb-4">Shop by Category</h2>
+    </div>
+    {% for category in categories %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            {% if category.image %}
+                <a href="{% url 'store:category_detail' category.slug %}">
+                    <img src="{{ category.image.url }}" href="{% url 'store:category_detail' category.slug %}" class="card-img-top" alt="{{ category.name }}">
+                </a>
+            {% else %}
+                <a href="{% url 'store:category_detail' category.slug %}">
+                    <img src="https://via.placeholder.com/300x200?text={{ category.name }}" class="card-img-top" alt="{{ category.name }}">
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Featured Products Section -->
+<div class="row">
+    <div class="col-12">
+        <h2 class="text-center mb-4">Featured Products</h2>
+    </div>
+    {% for product in featured_products %}
+    <div class="col-md-3 mb-4">
+        <div class="card h-100 d-flex flex-column">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            {% else %}
+                <img src="https://via.placeholder.com/300x300?text=Product" class="card-img-top" alt="{{ product.name }}">
+            {% endif %}
+            <div class="card-body d-flex flex-column">
+                <div class="mt-auto">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <h5 class="card-text text-success">{{ product.price }} TK</h5>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'store:product_detail' product.slug %}" class="btn btn-outline-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+        <p>No featured products available at the moment.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

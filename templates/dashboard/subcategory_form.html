@@ -1,0 +1,88 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}{{ title }} | Admin Dashboard{% endblock %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3">{{ title }}</h1>
+    <a href="{% url 'dashboard:subcategory_list' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Subcategories
+    </a>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="{{ form.category.id_for_label }}" class="form-label">Parent Category</label>
+                {{ form.category }}
+                {% if form.category.errors %}
+                <div class="text-danger">
+                    {% for error in form.category.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label for="{{ form.name.id_for_label }}" class="form-label">Subcategory Name</label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                <div class="text-danger">
+                    {% for error in form.name.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                <div class="text-danger">
+                    {% for error in form.description.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label for="{{ form.image.id_for_label }}" class="form-label">Subcategory Image</label>
+                {{ form.image }}
+                {% if form.image.errors %}
+                <div class="text-danger">
+                    {% for error in form.image.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if subcategory and subcategory.image %}
+                <div class="mt-2">
+                    <p>Current image:</p>
+                    <img src="{{ subcategory.image.url }}" alt="{{ subcategory.name }}" class="img-thumbnail" style="max-width: 200px;">
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3 form-check">
+                {{ form.is_active }}
+                <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                    Active
+                </label>
+            </div>
+            
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Subcategory
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

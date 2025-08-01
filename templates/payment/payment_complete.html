@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment Complete | Ameaozon{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card text-center">
+            <div class="card-body">
+                <div class="display-1 text-success mb-3">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                
+                {% if order.payment_method == 'cash_on_delivery' %}
+                <h2 class="card-title">Order Confirmed!</h2>
+                <p class="card-text">Your Cash on Delivery order has been confirmed. We'll deliver your items soon.</p>
+                {% else %}
+                <h2 class="card-title">Payment Successful!</h2>
+                <p class="card-text">Your payment has been processed successfully. We'll deliver your items soon.</p>
+                {% endif %}
+                
+                <div class="alert alert-info mt-3">
+                    <h5>Order Tracking Number: <strong>{{ order.tracking_number }}</strong></h5>
+                    <p>Use this number to track your order status.</p>
+                </div>
+                
+                {% if payment %}
+                <div class="mt-4">
+                    <h5>Payment Details:</h5>
+                    <p><strong>Payment ID:</strong> {{ payment.payment_id }}</p>
+                    <p><strong>Payment Method:</strong> {{ payment.payment_method }}</p>
+                    <p><strong>Amount:</strong> {{ payment.amount }} TK</p>
+                    <p><strong>Status:</strong> {{ payment.get_status_display }}</p>
+                    <p><strong>Date:</strong> {{ payment.created_at|date:"F d, Y H:i" }}</p>
+                </div>
+                {% endif %}
+                
+                <div class="mt-4">
+                    <a href="{% url 'orders:order_complete' order.tracking_number %}" class="btn btn-primary me-2">
+                        <i class="fas fa-receipt"></i> View Order Details
+                    </a>
+                    <a href="{% url 'store:home' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-home"></i> Continue Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
