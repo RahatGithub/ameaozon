@@ -9,7 +9,7 @@ urlpatterns = [
     path('', include('store.urls')),
     path('orders/', include('orders.urls')),
     path('payment/', include('payment.urls')),
-    # path('dashboard/', include('dashboard.urls')),
+    path('dashboard/', include('dashboard.urls')),
 ]
 
 # static and media files settings 

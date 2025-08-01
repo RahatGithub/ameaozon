@@ -8,21 +8,21 @@
         <div id="homeCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="https://via.placeholder.com/1200x400?text=Welcome+to+Ameaozon+Pet+Shop" class="d-block w-100" alt="...">
+                    <img src="https://placehold.co/300x100" class="d-block w-100" alt="...">
                     <div class="carousel-caption d-none d-md-block">
                         <h2>Welcome to Ameaozon Pet Shop</h2>
                         <p>Your one-stop destination for all pet needs</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="https://via.placeholder.com/1200x400?text=Quality+Products+for+Your+Pets" class="d-block w-100" alt="...">
+                    <img src="https://placehold.co/300x100" class="d-block w-100" alt="...">
                     <div class="carousel-caption d-none d-md-block">
                         <h2>Quality Products for Your Pets</h2>
                         <p>We offer premium selections for your furry friends</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="https://via.placeholder.com/1200x400?text=Special+Offers" class="d-block w-100" alt="...">
+                    <img src="https://placehold.co/300x100" class="d-block w-100" alt="...">
                     <div class="carousel-caption d-none d-md-block">
                         <h2>Special Offers</h2>
                         <p>Check out our latest deals and discounts</p>
@@ -50,14 +50,14 @@
     <div class="col-md-4 mb-3">
         <div class="card h-100">
             {% if category.image %}
-                <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}">
+                <a href="{% url 'store:category_detail' category.slug %}">
+                    <img src="{{ category.image.url }}" href="{% url 'store:category_detail' category.slug %}" class="card-img-top" alt="{{ category.name }}">
+                </a>
             {% else %}
-                <img src="https://via.placeholder.com/300x200?text={{ category.name }}" class="card-img-top" alt="{{ category.name }}">
+                <a href="{% url 'store:category_detail' category.slug %}">
+                    <img src="https://via.placeholder.com/300x200?text={{ category.name }}" class="card-img-top" alt="{{ category.name }}">
+                </a>
             {% endif %}
-            <div class="card-body text-center">
-                <h5 class="card-title">{{ category.name }}</h5>
-                <a href="{% url 'store:category_detail' category.slug %}" class="btn btn-primary">View Products</a>
-            </div>
         </div>
     </div>
     {% endfor %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Results | Ameaozon{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Search Results for "{{ query }}"</h2>
+        
+        {% if products %}
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/300x300?text=Product" class="card-img-top" alt="{{ product.name }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">
+                            <span class="text-primary fw-bold">{{ product.price }} TK</span>
+                            <br>
+                            <small class="text-muted">{{ product.subcategory.name }} in {{ product.subcategory.category.name }}</small>
+                        </p>
+                        
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'store:product_detail' product.slug %}" class="btn btn-outline-primary">View Details</a>
+                            {% if product.stock > 0 %}
+                            <form action="{% url 'orders:cart_add' product.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </form>
+                            {% else %}
+                            <button class="btn btn-secondary w-100" disabled>
+                                <i class="fas fa-times"></i> Out of Stock
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-search fa-4x mb-3 text-muted"></i>
+                <h3>No products found</h3>
+                <p>We couldn't find any products matching your search "{{ query }}".</p>
+                <a href="{% url 'store:home' %}" class="btn btn-primary mt-3">
+                    <i class="fas fa-home"></i> Back to Home
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
