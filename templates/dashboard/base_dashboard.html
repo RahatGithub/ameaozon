@@ -100,6 +100,11 @@
                             <i class="fas fa-fw fa-shopping-bag"></i> Orders
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/dashboard/carousel' in request.path %}active{% endif %}" href="{% url 'dashboard:carousel_list' %}">
+                            <i class="fas fa-fw fa-images"></i> Carousel Images
+                        </a>
+                    </li>
                 </ul>
                 
                 <hr class="sidebar-divider my-0 bg-light opacity-25">

@@ -2,16 +2,19 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Avg
 from django.contrib import messages
-from .models import Category, SubCategory, Product, Review, Wishlist
-from .forms import ReviewForm
+from .models import Category, SubCategory, Product, Review, Wishlist, CarouselImage
+from .forms import ReviewForm, CarouselImageForm
+
 
 def home(request):
     categories = Category.objects.filter(is_active=True)
     featured_products = Product.objects.filter(is_available=True)[:8]
+    carousel_images = CarouselImage.objects.all().order_by('order', '-created_at')
     
     context = {
         'categories': categories,
         'featured_products': featured_products,
+        'carousel_images' : carousel_images,
     }
     return render(request, 'store/home.html', context)
 

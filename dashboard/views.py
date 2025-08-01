@@ -4,10 +4,12 @@ from django.contrib import messages
 from django.db.models import Sum, Count
 from django.utils.text import slugify
 from accounts.models import User
-from store.models import Category, SubCategory, Product, ProductImage, Review
+from store.models import Category, SubCategory, Product, ProductImage, Review, CarouselImage
 from orders.models import Order, OrderItem
 from .forms import CategoryForm, SubCategoryForm, ProductForm, ProductImageFormSet
+from store.forms import CarouselImageForm 
 from .decorators import admin_required
+
 
 @login_required
 @admin_required
@@ -251,3 +253,81 @@ def update_order_status(request, tracking_number):
             messages.error(request, 'Invalid status')
     
     return redirect('dashboard:order_detail', tracking_number=tracking_number)
+
+
+
+# Carousel related views
+@login_required
+@admin_required
+def carousel_list(request):
+    carousel_images = CarouselImage.objects.all().order_by('order', '-created_at')
+    context = {
+        'carousel_images': carousel_images
+    }
+    return render(request, 'dashboard/carousel_list.html', context)
+
+@login_required
+@admin_required
+def carousel_add(request):
+    if request.method == 'POST':
+        form = CarouselImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Carousel image added successfully.')
+            return redirect('dashboard:carousel_list')
+    else:
+        form = CarouselImageForm()
+    
+    context = {
+        'form': form,
+        'title': 'Add Carousel Image'
+    }
+    return render(request, 'dashboard/carousel_form.html', context)
+
+@login_required
+@admin_required
+def carousel_edit(request, image_id):
+    carousel_image = get_object_or_404(CarouselImage, id=image_id)
+    
+    if request.method == 'POST':
+        form = CarouselImageForm(request.POST, request.FILES, instance=carousel_image)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Carousel image updated successfully.')
+            return redirect('dashboard:carousel_list')
+    else:
+        form = CarouselImageForm(instance=carousel_image)
+    
+    context = {
+        'form': form,
+        'carousel_image': carousel_image,
+        'title': 'Edit Carousel Image'
+    }
+    return render(request, 'dashboard/carousel_form.html', context)
+
+@login_required
+@admin_required
+def carousel_toggle_active(request, image_id):
+    carousel_image = get_object_or_404(CarouselImage, id=image_id)
+    carousel_image.is_active = not carousel_image.is_active
+    carousel_image.save()
+    
+    status = "activated" if carousel_image.is_active else "deactivated"
+    messages.success(request, f'Carousel image {status} successfully.')
+    
+    return redirect('dashboard:carousel_list')
+
+@login_required
+@admin_required
+def carousel_delete(request, image_id):
+    carousel_image = get_object_or_404(CarouselImage, id=image_id)
+    
+    if request.method == 'POST':
+        carousel_image.delete()
+        messages.success(request, 'Carousel image deleted successfully.')
+        return redirect('dashboard:carousel_list')
+    
+    context = {
+        'carousel_image': carousel_image
+    }
+    return render(request, 'dashboard/carousel_delete.html', context)
