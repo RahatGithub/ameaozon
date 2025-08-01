@@ -69,11 +69,13 @@
             {% else %}
                 <img src="https://via.placeholder.com/300x300?text=Product" class="card-img-top" alt="{{ product.name }}">
             {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text text-muted">{{ product.price }} TK</p>
-                <div class="d-grid gap-2">
-                    <a href="{% url 'store:product_detail' product.slug %}" class="btn btn-outline-primary">View Details</a>
+            <div class="card-body d-flex flex-column">
+                <div class="mt-auto">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <h6 class="card-text text-success">{{ product.price }} TK</h6>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'store:product_detail' product.slug %}" class="btn btn-outline-primary">View Details</a>
+                    </div>
                 </div>
             </div>
         </div>
