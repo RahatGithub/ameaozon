@@ -1,8 +1,11 @@
 # Ameaozon - Pet Shop E-commerce Platform
 
-![Ameaozon Logo](static/images/logo2.png)
+![Ameaozon Logo](static/images/logo-transparent.png)
 
 A comprehensive e-commerce platform designed for pet shops, built with Django. Ameaozon offers a complete solution for managing pet products, customer orders, and inventory.
+
+## Screen Recording
+Watch the screen-recorded walkthrough: https://photos.app.goo.gl/3UAWmNj3Mmq1y85j7 
 
 ## Features
 
@@ -41,8 +44,8 @@ A comprehensive e-commerce platform designed for pet shops, built with Django. A
 
 1. Clone the repository
 ```bash
-git clone https://github.com/RahatGithub/ameaozon-local.git
-cd ameaozon-local
+git clone https://github.com/RahatGithub/ameaozon.git
+cd ameaozon
 ```
 
 2. Create and activate a virtual environment
@@ -112,19 +115,25 @@ ameaozon/
 ## Screenshots
 
 ### Home Page
-![Home Page](https://via.placeholder.com/800x400?text=Home+Page)
+![Home](static/images/home-ss.png)
+
+### Subcategories
+![Subcategories](static/images/subcategories-ss.png)
 
 ### Product Listing
-![Product Listing](https://via.placeholder.com/800x400?text=Product+Listing)
+![Product List](static/images/product-list-ss.png)
 
 ### Product Detail
-![Product Detail](https://via.placeholder.com/800x400?text=Product+Detail)
+![Product Detail](static/images/product-detail-ss.png)
 
 ### Shopping Cart
-![Shopping Cart](https://via.placeholder.com/800x400?text=Shopping+Cart)
+![Shopping Cart](static/images/shopping-cart-ss.png)
+
+### User Dashboard
+![User Dashboard](static/images/user-dashboard-ss.png)
 
 ### Admin Dashboard
-![Admin Dashboard](https://via.placeholder.com/800x400?text=Admin+Dashboard)
+![Admin Dashboard](static/images/admin-dashboard-ss.png)
 
 ## Usage
 
