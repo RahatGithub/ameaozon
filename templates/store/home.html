@@ -56,7 +56,7 @@
         <div class="card h-100">
             {% if category.image %}
                 <a href="{% url 'store:category_detail' category.slug %}">
-                    <img src="{{ category.image.url }}" href="{% url 'store:category_detail' category.slug %}" class="card-img-top" alt="{{ category.name }}">
+                    <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}">
                 </a>
             {% else %}
                 <a href="{% url 'store:category_detail' category.slug %}">

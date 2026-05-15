@@ -30,10 +30,22 @@ class ProductForm(forms.ModelForm):
             'subcategory': forms.Select(attrs={'class': 'form-control'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
-            'price': forms.NumberInput(attrs={'class': 'form-control'}),
-            'stock': forms.NumberInput(attrs={'class': 'form-control'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'step': '0.01'}),
+            'stock': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),
         }
+
+    def clean_price(self):
+        price = self.cleaned_data.get('price')
+        if price is not None and price < 0:
+            raise forms.ValidationError("Price cannot be negative.")
+        return price
+
+    def clean_stock(self):
+        stock = self.cleaned_data.get('stock')
+        if stock is not None and stock < 0:
+            raise forms.ValidationError("Stock cannot be negative.")
+        return stock
 
 class ProductImageForm(forms.ModelForm):
     class Meta:

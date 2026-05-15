@@ -43,10 +43,7 @@ def customer_dashboard(request):
         return redirect('dashboard:admin_dashboard')
     
     orders = request.user.orders.all().order_by('-created_at')
-    try:
-        wishlist = request.user.wishlist_set.first()
-    except:
-        wishlist = None
+    wishlist = request.user.wishlist_set.first()
     
     context = {
         'orders': orders,

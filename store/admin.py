@@ -6,7 +6,7 @@ class ProductImageInline(admin.TabularInline):
     extra = 3
 
 class CarouselImageAdmin(admin.ModelAdmin):
-    list_display = ['order', 'is_active', 'created_at']
+    list_display = ['__str__', 'order', 'is_active', 'created_at']
     list_editable = ['is_active', 'order']
     list_filter = ['is_active']
 
@@ -27,6 +27,16 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(SubCategory, SubCategoryAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage)
-admin.site.register(CarouselImage)
-admin.site.register(Review)
-admin.site.register(Wishlist)
+admin.site.register(CarouselImage, CarouselImageAdmin)
+
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ['product', 'user', 'rating', 'created_at']
+    list_filter = ['rating', 'created_at']
+    search_fields = ['product__name', 'user__username', 'comment']
+
+class WishlistAdmin(admin.ModelAdmin):
+    list_display = ['user', 'created_at']
+    search_fields = ['user__username']
+
+admin.site.register(Review, ReviewAdmin)
+admin.site.register(Wishlist, WishlistAdmin)

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db import transaction
 from django.db.models import F
 from django.http import HttpResponseRedirect
 from .models import Cart, CartItem, Order, OrderItem
@@ -36,7 +37,10 @@ def cart_add(request, product_id):
     cart, created = Cart.objects.get_or_create(user=request.user)
     
     # Get quantity from form
-    quantity = int(request.POST.get('quantity', 1))
+    try:
+        quantity = int(request.POST.get('quantity', 1))
+    except (ValueError, TypeError):
+        quantity = 1
     
     # Check if quantity is valid
     if quantity <= 0:
@@ -120,29 +124,31 @@ def checkout(request):
         
         if request.method == 'POST':
             form = OrderForm(request.POST)
-            
+
             if form.is_valid():
-                order = form.save(commit=False)
-                order.user = request.user
-                order.total_price = total_price
-                order.save()
-                
-                # Create order items
-                for item in cart_items:
-                    OrderItem.objects.create(
-                        order=order,
-                        product=item.product,
-                        price=item.product.price,
-                        quantity=item.quantity
-                    )
-                    
-                    # Update product stock
-                    item.product.stock = F('stock') - item.quantity
-                    item.product.save()
-                
-                # Clear cart
-                cart.items.all().delete()
-                
+                with transaction.atomic():
+                    order = form.save(commit=False)
+                    order.user = request.user
+                    order.total_price = total_price
+                    order.save()
+
+                    # Create order items
+                    for item in cart_items:
+                        OrderItem.objects.create(
+                            order=order,
+                            product=item.product,
+                            price=item.product.price,
+                            quantity=item.quantity
+                        )
+
+                        # Update product stock
+                        Product.objects.filter(pk=item.product.pk).update(
+                            stock=F('stock') - item.quantity
+                        )
+
+                    # Clear cart
+                    cart.items.all().delete()
+
                 # Redirect to payment page
                 return redirect('payment:payment_process', tracking_number=order.tracking_number)
         else:
@@ -216,6 +222,6 @@ def track_order_detail(request, tracking_number):
         }
         return render(request, 'orders/track_order_detail.html', context)
     
-    except:
+    except Order.DoesNotExist:
         messages.error(request, "Invalid tracking number. Please try again.")
         return redirect('orders:track_order')

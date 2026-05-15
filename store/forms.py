@@ -13,8 +13,11 @@ class ReviewForm(forms.ModelForm):
 class CarouselImageForm(forms.ModelForm):
     class Meta:
         model = CarouselImage
-        fields = ['image', 'order', 'is_active']
+        fields = ['image', 'title', 'subtitle', 'link', 'order', 'is_active']
         widgets = {
             'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'subtitle': forms.TextInput(attrs={'class': 'form-control'}),
+            'link': forms.URLInput(attrs={'class': 'form-control'}),
             'order': forms.NumberInput(attrs={'class': 'form-control'}),
         }

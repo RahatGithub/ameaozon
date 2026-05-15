@@ -40,9 +40,12 @@
                                 <i class="fas fa-times"></i> Out of Stock
                             </button>
                             {% endif %}
-                            <a href="{% url 'store:remove_from_wishlist' product.id %}" class="btn btn-outline-danger">
-                                <i class="fas fa-trash"></i> Remove
-                            </a>
+                            <form method="post" action="{% url 'store:remove_from_wishlist' product.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

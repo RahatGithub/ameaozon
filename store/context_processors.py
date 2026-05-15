@@ -1,10 +1,13 @@
+from django.core.cache import cache
 from .models import Category
 from orders.models import Cart
 
 def categories(request):
-    return {
-        'categories': Category.objects.filter(is_active=True)
-    }
+    cats = cache.get('active_categories')
+    if cats is None:
+        cats = list(Category.objects.filter(is_active=True))
+        cache.set('active_categories', cats, 300)  # cache for 5 minutes
+    return {'categories': cats}
 
 def cart_count(request):
     count = 0

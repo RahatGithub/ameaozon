@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Avg
 from django.utils.text import slugify
 from django.conf import settings
 from django.utils import timezone
@@ -64,10 +65,8 @@ class Product(models.Model):
         super().save(*args, **kwargs)
     
     def get_average_rating(self):
-        reviews = self.reviews.all()
-        if reviews:
-            return sum(review.rating for review in reviews) / len(reviews)
-        return 0
+        result = self.reviews.aggregate(avg=Avg('rating'))['avg']
+        return result or 0
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
@@ -78,13 +77,16 @@ class ProductImage(models.Model):
 
 class CarouselImage(models.Model):
     image = models.ImageField(upload_to='carousel/')
+    title = models.CharField(max_length=200, blank=True)
+    subtitle = models.CharField(max_length=300, blank=True)
+    link = models.URLField(blank=True)
     is_active = models.BooleanField(default=True)
     order = models.IntegerField(default=0, help_text="Display order (lower numbers shown first)")
     created_at = models.DateTimeField(default=timezone.now)
-    
+
     class Meta:
         ordering = ['order', '-created_at']
-    
+
     def __str__(self):
         return self.title if self.title else f"Carousel Image {self.id}"
     

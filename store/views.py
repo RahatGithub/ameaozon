@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.db.models import Q, Avg
 from django.contrib import messages
 from .models import Category, SubCategory, Product, Review, Wishlist, CarouselImage
@@ -112,23 +113,26 @@ def wishlist(request):
     return render(request, 'store/wishlist.html', context)
 
 @login_required
+@require_POST
 def add_to_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-    
+
     if product not in wishlist.products.all():
         wishlist.products.add(product)
         messages.success(request, f'{product.name} added to your wishlist.')
-    
-    return redirect(request.META.get('HTTP_REFERER', 'store:home'))
+
+    return redirect('store:product_detail', product_slug=product.slug)
 
 @login_required
+@require_POST
 def remove_from_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     wishlist = Wishlist.objects.filter(user=request.user).first()
-    
+
     if wishlist and product in wishlist.products.all():
         wishlist.products.remove(product)
         messages.success(request, f'{product.name} removed from your wishlist.')
-    
-    return redirect(request.META.get('HTTP_REFERER', 'store:wishlist'))
+
+    next_url = request.POST.get('next', 'store:wishlist')
+    return redirect(next_url)
