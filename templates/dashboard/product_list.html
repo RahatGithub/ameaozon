@@ -3,78 +3,74 @@
 {% block title %}Products | Admin Dashboard{% endblock %}
 
 {% block dashboard_content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3">Products</h1>
-    <a href="{% url 'dashboard:product_add' %}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Add Product
-    </a>
+<div class="flex items-center justify-between mb-6">
+  <h1 class="font-display text-2xl sm:text-3xl font-extrabold text-ink-900">Products</h1>
+  <a href="{% url 'dashboard:product_add' %}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold shadow-glow transition">
+    <i class="fas fa-plus text-xs"></i> Add Product
+  </a>
 </div>
 
-<div class="card shadow mb-4">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for product in products %}
-                    <tr>
-                        <td>{{ product.id }}</td>
-                        <td>
-                            {% if product.image %}
-                                <img src="{{ product.image.url }}" alt="{{ product.name }}" width="50">
-                            {% else %}
-                                <div class="bg-light d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
-                                    <i class="fas fa-image text-secondary"></i>
-                                </div>
-                            {% endif %}
-                        </td>
-                        <td>{{ product.name }}</td>
-                        <td>{{ product.subcategory.category.name }} / {{ product.subcategory.name }}</td>
-                        <td>{{ product.price }} TK</td>
-                        <td>
-                            {% if product.stock <= 5 and product.stock > 0 %}
-                                <span class="text-warning">{{ product.stock }} (Low)</span>
-                            {% elif product.stock == 0 %}
-                                <span class="text-danger">Out of stock</span>
-                            {% else %}
-                                {{ product.stock }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if product.is_available %}
-                                <span class="badge bg-success">Available</span>
-                            {% else %}
-                                <span class="badge bg-danger">Unavailable</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="{% url 'dashboard:product_edit' product.id %}" class="btn btn-sm btn-primary">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
-                            <a href="{% url 'store:product_detail' product.slug %}" class="btn btn-sm btn-info" target="_blank">
-                                <i class="fas fa-eye"></i> View
-                            </a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="8" class="text-center">No products found</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+<div class="bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-ink-100 bg-ink-50/50">
+          <th class="text-left px-6 py-3 font-semibold text-ink-700">ID</th>
+          <th class="text-left px-6 py-3 font-semibold text-ink-700">Image</th>
+          <th class="text-left px-6 py-3 font-semibold text-ink-700">Name</th>
+          <th class="text-left px-6 py-3 font-semibold text-ink-700">Category</th>
+          <th class="text-left px-6 py-3 font-semibold text-ink-700">Price</th>
+          <th class="text-left px-6 py-3 font-semibold text-ink-700">Stock</th>
+          <th class="text-left px-6 py-3 font-semibold text-ink-700">Status</th>
+          <th class="text-right px-6 py-3 font-semibold text-ink-700">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-ink-100">
+        {% for product in products %}
+        <tr class="hover:bg-ink-50/50 transition">
+          <td class="px-6 py-4 text-ink-500">{{ product.id }}</td>
+          <td class="px-6 py-4">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-12 h-12 rounded-xl object-cover ring-1 ring-ink-100">
+            {% else %}
+            <div class="w-12 h-12 rounded-xl bg-ink-100 flex items-center justify-center text-ink-400"><i class="fas fa-image"></i></div>
+            {% endif %}
+          </td>
+          <td class="px-6 py-4 font-semibold text-ink-900">{{ product.name }}</td>
+          <td class="px-6 py-4 text-ink-500">{{ product.subcategory.category.name }} / {{ product.subcategory.name }}</td>
+          <td class="px-6 py-4 font-display font-bold text-ink-900">{{ product.price }} TK</td>
+          <td class="px-6 py-4">
+            {% if product.stock == 0 %}
+            <span class="text-rose-600 font-semibold">Out of stock</span>
+            {% elif product.stock <= 5 %}
+            <span class="text-amber-600 font-semibold">{{ product.stock }} (Low)</span>
+            {% else %}
+            <span class="text-ink-700">{{ product.stock }}</span>
+            {% endif %}
+          </td>
+          <td class="px-6 py-4">
+            {% if product.is_available %}
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Available</span>
+            {% else %}
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Unavailable</span>
+            {% endif %}
+          </td>
+          <td class="px-6 py-4 text-right">
+            <div class="flex items-center justify-end gap-2">
+              <a href="{% url 'dashboard:product_edit' product.id %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-50 hover:bg-brand-100 text-brand-600 text-xs font-semibold transition">
+                <i class="fas fa-pen"></i> Edit
+              </a>
+              <a href="{% url 'store:product_detail' product.slug %}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ink-50 hover:bg-ink-100 text-ink-600 text-xs font-semibold transition">
+                <i class="fas fa-eye"></i> View
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8" class="px-6 py-8 text-center text-ink-500">No products found</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

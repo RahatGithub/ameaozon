@@ -3,196 +3,145 @@
 {% block title %}Admin Dashboard | Ameaozon{% endblock %}
 
 {% block dashboard_content %}
-<h1 class="h2 mb-4">Dashboard</h1>
+<div class="mb-6">
+  <h1 class="font-display text-2xl sm:text-3xl font-extrabold text-ink-900">Dashboard</h1>
+</div>
 
 <!-- Stats Cards -->
-<div class="row">
-    <div class="col-md-4 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            Total Orders</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_orders }}</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-shopping-bag fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+  <div class="bg-white rounded-2xl ring-1 ring-ink-100 shadow-card p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-500 flex items-center justify-center shrink-0">
+      <i class="fas fa-shopping-bag text-lg"></i>
     </div>
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-ink-500">Total Orders</p>
+      <p class="font-display text-2xl font-extrabold text-ink-900">{{ total_orders }}</p>
+    </div>
+  </div>
 
-    <div class="col-md-4 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                            Total Revenue</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_revenue }} TK</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="bg-white rounded-2xl ring-1 ring-ink-100 shadow-card p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center shrink-0">
+      <i class="fas fa-bangladeshi-taka-sign text-lg"></i>
     </div>
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-ink-500">Total Revenue</p>
+      <p class="font-display text-2xl font-extrabold text-ink-900">{{ total_revenue }} <span class="text-sm text-ink-500">TK</span></p>
+    </div>
+  </div>
 
-    <div class="col-md-4 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                            Total Customers</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_customers }}</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-users fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="bg-white rounded-2xl ring-1 ring-ink-100 shadow-card p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center shrink-0">
+      <i class="fas fa-users text-lg"></i>
     </div>
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-ink-500">Total Customers</p>
+      <p class="font-display text-2xl font-extrabold text-ink-900">{{ total_customers }}</p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl ring-1 ring-ink-100 shadow-card p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
+      <i class="fas fa-clock text-lg"></i>
+    </div>
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-ink-500">Pending Orders</p>
+      <p class="font-display text-2xl font-extrabold text-ink-900">{{ pending_orders }}</p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl ring-1 ring-ink-100 shadow-card p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center shrink-0">
+      <i class="fas fa-check-circle text-lg"></i>
+    </div>
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-ink-500">Completed</p>
+      <p class="font-display text-2xl font-extrabold text-ink-900">{{ completed_orders }}</p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl ring-1 ring-ink-100 shadow-card p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-500 flex items-center justify-center shrink-0">
+      <i class="fas fa-box text-lg"></i>
+    </div>
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-ink-500">Total Products</p>
+      <p class="font-display text-2xl font-extrabold text-ink-900">{{ total_products }}</p>
+    </div>
+  </div>
 </div>
 
-<div class="row">
-    <div class="col-md-4 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            Pending Orders</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pending_orders }}</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-clock fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- Recent Orders & Popular Products -->
+<div class="grid lg:grid-cols-3 gap-6">
 
-    <div class="col-md-4 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                            Completed Orders</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ completed_orders }}</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-check-circle fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- Recent Orders -->
+  <div class="lg:col-span-2 bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden">
+    <div class="px-6 py-4 border-b border-ink-100 flex items-center justify-between">
+      <h2 class="font-display font-bold text-ink-900">Recent Orders</h2>
+      <a href="{% url 'dashboard:order_list' %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-50 hover:bg-brand-100 text-brand-600 text-xs font-semibold transition">
+        View All <i class="fas fa-arrow-right text-[10px]"></i>
+      </a>
     </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-ink-100 bg-ink-50/50">
+            <th class="text-left px-6 py-3 font-semibold text-ink-700">Order #</th>
+            <th class="text-left px-6 py-3 font-semibold text-ink-700">Customer</th>
+            <th class="text-left px-6 py-3 font-semibold text-ink-700">Date</th>
+            <th class="text-left px-6 py-3 font-semibold text-ink-700">Status</th>
+            <th class="text-right px-6 py-3 font-semibold text-ink-700">Amount</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-ink-100">
+          {% for order in recent_orders %}
+          <tr class="hover:bg-ink-50/50 transition">
+            <td class="px-6 py-3"><a href="{% url 'dashboard:order_detail' order.tracking_number %}" class="font-display font-bold text-brand-600 hover:text-brand-700">{{ order.tracking_number }}</a></td>
+            <td class="px-6 py-3 text-ink-700">{{ order.user.username }}</td>
+            <td class="px-6 py-3 text-ink-500">{{ order.created_at|date:"M d, Y" }}</td>
+            <td class="px-6 py-3">
+              {% if order.status == 'pending' %}
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Pending</span>
+              {% elif order.status == 'processing' %}
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Processing</span>
+              {% elif order.status == 'shipped' %}
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span> Shipped</span>
+              {% elif order.status == 'delivered' %}
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Delivered</span>
+              {% elif order.status == 'cancelled' %}
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Cancelled</span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-3 text-right font-display font-bold text-ink-900">{{ order.total_price }} TK</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="px-6 py-8 text-center text-ink-500">No orders yet</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-    <div class="col-md-4 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            Total Products</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_products }}</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-box fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- Popular Products -->
+  <div class="lg:col-span-1 bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden">
+    <div class="px-6 py-4 border-b border-ink-100 flex items-center justify-between">
+      <h2 class="font-display font-bold text-ink-900">Popular Products</h2>
+      <a href="{% url 'dashboard:product_list' %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-50 hover:bg-brand-100 text-brand-600 text-xs font-semibold transition">
+        All <i class="fas fa-arrow-right text-[10px]"></i>
+      </a>
     </div>
-</div>
-
-<!-- Recent Orders and Popular Products -->
-<div class="row">
-    <!-- Recent Orders -->
-    <div class="col-md-8 mb-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">Recent Orders</h6>
-                <a href="{% url 'dashboard:order_list' %}" class="btn btn-sm btn-primary">View All</a>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>Order #</th>
-                                <th>Customer</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for order in recent_orders %}
-                            <tr>
-                                <td>
-                                    <a href="{% url 'dashboard:order_detail' order.tracking_number %}">
-                                        {{ order.tracking_number }}
-                                    </a>
-                                </td>
-                                <td>{{ order.user.username }}</td>
-                                <td>{{ order.created_at|date:"M d, Y" }}</td>
-                                <td>
-                                    {% if order.status == 'pending' %}
-                                    <span class="badge bg-warning text-dark">Pending</span>
-                                    {% elif order.status == 'processing' %}
-                                    <span class="badge bg-info text-dark">Processing</span>
-                                    {% elif order.status == 'shipped' %}
-                                    <span class="badge bg-primary">Shipped</span>
-                                    {% elif order.status == 'delivered' %}
-                                    <span class="badge bg-success">Delivered</span>
-                                    {% elif order.status == 'cancelled' %}
-                                    <span class="badge bg-danger">Cancelled</span>
-                                    {% endif %}
-                                </td>
-                                <td>{{ order.total_price }} TK</td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center">No orders yet</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="divide-y divide-ink-100">
+      {% for product in popular_products %}
+      <div class="px-6 py-4 flex items-center justify-between gap-3">
+        <div class="min-w-0">
+          <h4 class="font-semibold text-ink-900 text-sm line-clamp-1">{{ product.name }}</h4>
+          <p class="text-xs text-ink-500">{{ product.subcategory.name }}</p>
         </div>
+        <span class="shrink-0 inline-flex items-center px-2.5 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-bold">{{ product.order_count }}</span>
+      </div>
+      {% empty %}
+      <div class="px-6 py-8 text-center text-ink-500 text-sm">No products ordered yet</div>
+      {% endfor %}
     </div>
-
-    <!-- Popular Products -->
-    <div class="col-md-4 mb-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">Popular Products</h6>
-                <a href="{% url 'dashboard:product_list' %}" class="btn btn-sm btn-primary">View All</a>
-            </div>
-            <div class="card-body">
-                <ul class="list-group">
-                    {% for product in popular_products %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-0">{{ product.name }}</h6>
-                            <small class="text-muted">{{ product.subcategory.name }}</small>
-                        </div>
-                        <span class="badge bg-primary rounded-pill">{{ product.order_count }} orders</span>
-                    </li>
-                    {% empty %}
-                    <li class="list-group-item text-center">No products ordered yet</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
 {% endblock %}

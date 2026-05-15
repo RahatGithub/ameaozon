@@ -3,71 +3,64 @@
 {% block title %}Carousel Images | Admin Dashboard{% endblock %}
 
 {% block dashboard_content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3">Carousel Images</h1>
-    <a href="{% url 'dashboard:carousel_add' %}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Add Carousel Image
-    </a>
+<div class="flex items-center justify-between mb-6">
+  <h1 class="font-display text-2xl sm:text-3xl font-extrabold text-ink-900">Carousel Images</h1>
+  <a href="{% url 'dashboard:carousel_add' %}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold shadow-glow transition">
+    <i class="fas fa-plus text-xs"></i> Add Image
+  </a>
 </div>
 
-<div class="card shadow mb-4">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Order</th>
-                        <th>Status</th>
-                        <th>Created</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for image in carousel_images %}
-                    <tr>
-                        <td>
-                            {% if image.image %}
-                                <img src="{{ image.image.url }}" alt="{{ image.id }}" width="150" class="img-thumbnail">
-                            {% else %}
-                                <div class="bg-light d-flex justify-content-center align-items-center" style="width: 150px; height: 100px;">
-                                    <i class="fas fa-image text-secondary"></i>
-                                </div>
-                            {% endif %}
-                        </td>
-                        <td>{{ image.order }}</td>
-                        <td>
-                            {% if image.is_active %}
-                                <span class="badge bg-success">Active</span>
-                            {% else %}
-                                <span class="badge bg-danger">Inactive</span>
-                            {% endif %}
-                        </td>
-                        <td>{{ image.created_at|date:"M d, Y" }}</td>
-                        <td>
-                            <a href="{% url 'dashboard:carousel_edit' image.id %}" class="btn btn-sm btn-primary">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
-                            <a href="{% url 'dashboard:carousel_toggle_active' image.id %}" class="btn btn-sm {% if image.is_active %}btn-warning{% else %}btn-success{% endif %}">
-                                {% if image.is_active %}
-                                    <i class="fas fa-eye-slash"></i> Deactivate
-                                {% else %}
-                                    <i class="fas fa-eye"></i> Activate
-                                {% endif %}
-                            </a>
-                            <a href="{% url 'dashboard:carousel_delete' image.id %}" class="btn btn-sm btn-danger">
-                                <i class="fas fa-trash"></i> Delete
-                            </a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6" class="text-center">No carousel images found</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+<div class="bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-ink-100 bg-ink-50/50">
+          <th class="text-left px-6 py-3 font-semibold text-ink-700">Image</th>
+          <th class="text-left px-6 py-3 font-semibold text-ink-700">Order</th>
+          <th class="text-left px-6 py-3 font-semibold text-ink-700">Status</th>
+          <th class="text-left px-6 py-3 font-semibold text-ink-700">Created</th>
+          <th class="text-right px-6 py-3 font-semibold text-ink-700">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-ink-100">
+        {% for image in carousel_images %}
+        <tr class="hover:bg-ink-50/50 transition">
+          <td class="px-6 py-4">
+            {% if image.image %}
+            <img src="{{ image.image.url }}" alt="Carousel {{ image.id }}" class="w-32 h-20 rounded-xl object-cover ring-1 ring-ink-100">
+            {% else %}
+            <div class="w-32 h-20 rounded-xl bg-ink-100 flex items-center justify-center text-ink-400"><i class="fas fa-image text-xl"></i></div>
+            {% endif %}
+          </td>
+          <td class="px-6 py-4 font-display font-bold text-ink-900">{{ image.order }}</td>
+          <td class="px-6 py-4">
+            {% if image.is_active %}
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active</span>
+            {% else %}
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Inactive</span>
+            {% endif %}
+          </td>
+          <td class="px-6 py-4 text-ink-500">{{ image.created_at|date:"M d, Y" }}</td>
+          <td class="px-6 py-4 text-right">
+            <div class="flex items-center justify-end gap-2">
+              <a href="{% url 'dashboard:carousel_edit' image.id %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-50 hover:bg-brand-100 text-brand-600 text-xs font-semibold transition">
+                <i class="fas fa-pen"></i> Edit
+              </a>
+              <a href="{% url 'dashboard:carousel_toggle_active' image.id %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition
+                        {% if image.is_active %}bg-amber-50 hover:bg-amber-100 text-amber-700{% else %}bg-emerald-50 hover:bg-emerald-100 text-emerald-700{% endif %}">
+                {% if image.is_active %}<i class="fas fa-eye-slash"></i> Deactivate{% else %}<i class="fas fa-eye"></i> Activate{% endif %}
+              </a>
+              <a href="{% url 'dashboard:carousel_delete' image.id %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold transition">
+                <i class="fas fa-trash"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="px-6 py-8 text-center text-ink-500">No carousel images found</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

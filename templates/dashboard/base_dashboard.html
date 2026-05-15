@@ -4,176 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Admin Dashboard | Ameaozon{% endblock %}</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Custom styles -->
-    <style>
-        body {
-            background-color: #f8f9fc;
-        }
-        .sidebar {
-            min-height: 100vh;
-            background-color: #4e73df;
-            background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
-            background-size: cover;
-        }
-        .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.8);
-            padding: 1rem;
-            margin-bottom: 0.25rem;
-        }
-        .sidebar .nav-link:hover {
-            color: #fff;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        .sidebar .nav-link.active {
-            color: #fff;
-            font-weight: bold;
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        .sidebar .sidebar-heading {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            padding: 1rem;
-            margin-bottom: 0;
-        }
-        .card-header {
-            background-color: #f8f9fc;
-            border-bottom: 1px solid #e3e6f0;
-        }
-        .border-left-primary {
-            border-left: 4px solid #4e73df !important;
-        }
-        .border-left-success {
-            border-left: 4px solid #1cc88a !important;
-        }
-        .border-left-info {
-            border-left: 4px solid #36b9cc !important;
-        }
-        .border-left-warning {
-            border-left: 4px solid #f6c23e !important;
-        }
-        .border-left-danger {
-            border-left: 4px solid #e74a3b !important;
-        }
-    </style>
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74',
+                400: '#fb923c', 500: '#f97316', 600: '#ea580c', 700: '#c2410c',
+                800: '#9a3412', 900: '#7c2d12',
+              },
+              ink: {
+                50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1',
+                400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155',
+                800: '#1e293b', 900: '#0f172a',
+              },
+            },
+            boxShadow: {
+              'card': '0 4px 20px -8px rgba(15,23,42,0.15)',
+            },
+          },
+        },
+      }
+    </script>
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     {% block styles %}{% endblock %}
 </head>
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-2 sidebar px-0 position-fixed">
-                <div class="text-center py-4">
-                    <a href="{% url 'store:home' %}" class="text-decoration-none">
-                        <h4 class="text-white">Ameaozon</h4>
-                    </a>
-                </div>
-                <hr class="sidebar-divider my-0 bg-light opacity-25">
-                <h6 class="sidebar-heading">Admin Panel</h6>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}" href="{% url 'dashboard:admin_dashboard' %}">
-                            <i class="fas fa-fw fa-tachometer-alt"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if '/dashboard/categories' in request.path %}active{% endif %}" href="{% url 'dashboard:category_list' %}">
-                            <i class="fas fa-fw fa-folder"></i> Categories
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if '/dashboard/subcategories' in request.path %}active{% endif %}" href="{% url 'dashboard:subcategory_list' %}">
-                            <i class="fas fa-fw fa-folder-open"></i> Subcategories
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if '/dashboard/products' in request.path %}active{% endif %}" href="{% url 'dashboard:product_list' %}">
-                            <i class="fas fa-fw fa-box"></i> Products
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if '/dashboard/orders' in request.path %}active{% endif %}" href="{% url 'dashboard:order_list' %}">
-                            <i class="fas fa-fw fa-shopping-bag"></i> Orders
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if '/dashboard/carousel' in request.path %}active{% endif %}" href="{% url 'dashboard:carousel_list' %}">
-                            <i class="fas fa-fw fa-images"></i> Carousel Images
-                        </a>
-                    </li>
-                </ul>
-                
-                <hr class="sidebar-divider my-0 bg-light opacity-25">
-                <h6 class="sidebar-heading">User</h6>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:profile' %}">
-                            <i class="fas fa-fw fa-user"></i> Profile
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:logout' %}">
-                            <i class="fas fa-fw fa-sign-out-alt"></i> Logout
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'store:home' %}">
-                            <i class="fas fa-fw fa-home"></i> Back to Shop
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            
-            <!-- Main Content -->
-            <div class="col-md-10 ms-auto px-4">
-                <div class="container-fluid py-4">
-                    <!-- Topbar -->
-                    <nav class="navbar navbar-expand navbar-light bg-white mb-4 shadow-sm">
-                        <div class="container-fluid">
-                            <ul class="navbar-nav ms-auto">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.user.username }}</span>
-                                        {% if request.user.profile_picture %}
-                                            <img class="img-profile rounded-circle" src="{{ request.user.profile_picture.url }}" width="32" height="32">
-                                        {% else %}
-                                            <i class="fas fa-user-circle fa-fw"></i>
-                                        {% endif %}
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Profile</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                    
-                    <!-- Messages -->
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
-                                {{ message }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    
-                    <!-- Page Content -->
-                    {% block dashboard_content %}{% endblock %}
-                </div>
-            </div>
-        </div>
+<body class="bg-ink-50 font-sans text-ink-900 antialiased" x-data="{ sidebarOpen: false }">
+
+  <!-- Mobile overlay -->
+  <div x-show="sidebarOpen" x-transition:enter="transition-opacity duration-200" x-transition:leave="transition-opacity duration-200"
+       @click="sidebarOpen = false"
+       class="fixed inset-0 bg-black/40 z-40 lg:hidden" style="display:none"></div>
+
+  <!-- Sidebar -->
+  <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+         class="fixed inset-y-0 left-0 z-50 w-64 bg-ink-900 transform transition-transform duration-200 lg:translate-x-0 lg:static lg:z-auto flex flex-col">
+    <!-- Logo -->
+    <div class="px-6 py-5 flex items-center gap-3 border-b border-white/10">
+      <span class="w-9 h-9 rounded-xl bg-brand-500 text-white inline-flex items-center justify-center">
+        <i class="fas fa-paw text-sm"></i>
+      </span>
+      <a href="{% url 'store:home' %}" class="font-display text-lg font-bold text-white no-underline">Ameaozon</a>
     </div>
 
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JS -->
-    {% block scripts %}{% endblock %}
+    <!-- Nav -->
+    <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+      <p class="px-3 text-[10px] font-semibold uppercase tracking-wider text-ink-500 mb-2">Admin Panel</p>
+
+      <a href="{% url 'dashboard:admin_dashboard' %}"
+         class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition
+                {% if request.path == '/dashboard/' %}bg-white/10 text-white{% else %}text-ink-400 hover:bg-white/5 hover:text-white{% endif %}">
+        <i class="fas fa-tachometer-alt w-5 text-center"></i> Dashboard
+      </a>
+      <a href="{% url 'dashboard:category_list' %}"
+         class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition
+                {% if '/dashboard/categories' in request.path %}bg-white/10 text-white{% else %}text-ink-400 hover:bg-white/5 hover:text-white{% endif %}">
+        <i class="fas fa-folder w-5 text-center"></i> Categories
+      </a>
+      <a href="{% url 'dashboard:subcategory_list' %}"
+         class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition
+                {% if '/dashboard/subcategories' in request.path %}bg-white/10 text-white{% else %}text-ink-400 hover:bg-white/5 hover:text-white{% endif %}">
+        <i class="fas fa-folder-open w-5 text-center"></i> Subcategories
+      </a>
+      <a href="{% url 'dashboard:product_list' %}"
+         class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition
+                {% if '/dashboard/products' in request.path %}bg-white/10 text-white{% else %}text-ink-400 hover:bg-white/5 hover:text-white{% endif %}">
+        <i class="fas fa-box w-5 text-center"></i> Products
+      </a>
+      <a href="{% url 'dashboard:order_list' %}"
+         class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition
+                {% if '/dashboard/orders' in request.path %}bg-white/10 text-white{% else %}text-ink-400 hover:bg-white/5 hover:text-white{% endif %}">
+        <i class="fas fa-shopping-bag w-5 text-center"></i> Orders
+      </a>
+      <a href="{% url 'dashboard:carousel_list' %}"
+         class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition
+                {% if '/dashboard/carousel' in request.path %}bg-white/10 text-white{% else %}text-ink-400 hover:bg-white/5 hover:text-white{% endif %}">
+        <i class="fas fa-images w-5 text-center"></i> Carousel
+      </a>
+
+      <p class="px-3 pt-4 text-[10px] font-semibold uppercase tracking-wider text-ink-500 mb-2">Account</p>
+
+      <a href="{% url 'accounts:profile' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-ink-400 hover:bg-white/5 hover:text-white transition">
+        <i class="fas fa-user w-5 text-center"></i> Profile
+      </a>
+      <a href="{% url 'store:home' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-ink-400 hover:bg-white/5 hover:text-white transition">
+        <i class="fas fa-home w-5 text-center"></i> Back to Shop
+      </a>
+      <a href="{% url 'accounts:logout' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition">
+        <i class="fas fa-sign-out-alt w-5 text-center"></i> Logout
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main area -->
+  <div class="lg:ml-64 min-h-screen flex flex-col">
+
+    <!-- Top bar -->
+    <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-ink-100 px-4 sm:px-6 h-16 flex items-center justify-between">
+      <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden w-10 h-10 rounded-xl bg-ink-100 hover:bg-ink-200 text-ink-700 inline-flex items-center justify-center transition">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="hidden lg:block"></div>
+
+      <div class="flex items-center gap-3">
+        <span class="text-sm font-medium text-ink-700 hidden sm:block">{{ request.user.username }}</span>
+        {% if request.user.profile_picture %}
+        <img src="{{ request.user.profile_picture.url }}" class="w-9 h-9 rounded-full object-cover ring-2 ring-brand-100">
+        {% else %}
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-white inline-flex items-center justify-center text-sm font-bold">
+          {{ request.user.username|slice:":1"|upper }}
+        </div>
+        {% endif %}
+      </div>
+    </header>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="px-4 sm:px-6 pt-4 space-y-2">
+      {% for message in messages %}
+      <div class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium
+                  {% if message.tags == 'success' %}bg-emerald-50 text-emerald-700 border border-emerald-100
+                  {% elif message.tags == 'error' or message.tags == 'danger' %}bg-rose-50 text-rose-700 border border-rose-100
+                  {% elif message.tags == 'warning' %}bg-amber-50 text-amber-700 border border-amber-100
+                  {% else %}bg-blue-50 text-blue-700 border border-blue-100{% endif %}">
+        <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' or message.tags == 'danger' %}fa-exclamation-circle{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %}"></i>
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Page content -->
+    <main class="flex-1 px-4 sm:px-6 py-6">
+      {% block dashboard_content %}{% endblock %}
+    </main>
+  </div>
+
+  {% block scripts %}{% endblock %}
 </body>
 </html>
