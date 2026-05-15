@@ -55,10 +55,9 @@
          class="fixed inset-y-0 left-0 z-50 w-64 bg-ink-900 transform transition-transform duration-200 lg:translate-x-0 lg:static lg:z-auto flex flex-col">
     <!-- Logo -->
     <div class="px-6 py-5 flex items-center gap-3 border-b border-white/10">
-      <span class="w-9 h-9 rounded-xl bg-brand-500 text-white inline-flex items-center justify-center">
-        <i class="fas fa-paw text-sm"></i>
-      </span>
-      <a href="{% url 'store:home' %}" class="font-display text-lg font-bold text-white no-underline">Ameaozon</a>
+      <a href="{% url 'store:home' %}" class="no-underline">
+        <img src="/static/images/ameaozon-logo.png" alt="Ameaozon" class="h-8 w-auto brightness-0 invert">
+      </a>
     </div>
 
     <!-- Nav -->
