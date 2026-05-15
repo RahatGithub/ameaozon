@@ -62,45 +62,64 @@ def cart_add(request, product_id):
     
     return redirect('orders:cart_detail')
 
+def _render_cart_partial(request):
+    try:
+        cart = Cart.objects.get(user=request.user)
+        cart_items = cart.items.all()
+    except Cart.DoesNotExist:
+        cart = None
+        cart_items = []
+    return render(request, 'orders/_cart_body.html', {'cart': cart, 'cart_items': cart_items})
+
+
 @login_required
 def cart_remove(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    
+
     try:
         cart = Cart.objects.get(user=request.user)
         cart_item = CartItem.objects.get(cart=cart, product=product)
         cart_item.delete()
-        messages.success(request, f"'{product.name}' removed from your cart.")
+        if not request.headers.get('HX-Request'):
+            messages.success(request, f"'{product.name}' removed from your cart.")
     except (Cart.DoesNotExist, CartItem.DoesNotExist):
         pass
-    
+
+    if request.headers.get('HX-Request'):
+        return _render_cart_partial(request)
     return redirect('orders:cart_detail')
+
 
 @login_required
 def cart_update(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    
+
     try:
         cart = Cart.objects.get(user=request.user)
         cart_item = CartItem.objects.get(cart=cart, product=product)
-        
+
         quantity = int(request.POST.get('quantity', 1))
-        
+
         # Validate quantity
         if quantity <= 0:
             cart_item.delete()
-            messages.success(request, f"'{product.name}' removed from your cart.")
+            if not request.headers.get('HX-Request'):
+                messages.success(request, f"'{product.name}' removed from your cart.")
         else:
             if quantity > product.stock:
                 quantity = product.stock
-                messages.warning(request, f"Only {product.stock} of '{product.name}' available.")
-            
+                if not request.headers.get('HX-Request'):
+                    messages.warning(request, f"Only {product.stock} of '{product.name}' available.")
+
             cart_item.quantity = quantity
             cart_item.save()
-            messages.success(request, f"'{product.name}' quantity updated.")
+            if not request.headers.get('HX-Request'):
+                messages.success(request, f"'{product.name}' quantity updated.")
     except (Cart.DoesNotExist, CartItem.DoesNotExist):
         pass
-    
+
+    if request.headers.get('HX-Request'):
+        return _render_cart_partial(request)
     return redirect('orders:cart_detail')
 
 @login_required

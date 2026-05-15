@@ -1,0 +1,108 @@
+{% load static %}
+<div id="cart-body">
+  {% if cart_items %}
+  <div class="grid lg:grid-cols-3 gap-8">
+    <!-- Items -->
+    <div class="lg:col-span-2 space-y-4">
+      {% for item in cart_items %}
+      <div id="cart-item-{{ item.product.id }}"
+           class="group relative bg-white rounded-2xl ring-1 ring-ink-100 shadow-card p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:items-center transition">
+        <a href="{% url 'store:product_detail' item.product.slug %}" class="block w-full sm:w-24 h-24 shrink-0 rounded-xl overflow-hidden bg-ink-100">
+          {% if item.product.image %}
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-full h-full object-cover">
+          {% else %}
+            <div class="w-full h-full flex items-center justify-center text-ink-300"><i class="fas fa-paw text-2xl"></i></div>
+          {% endif %}
+        </a>
+
+        <div class="flex-1 min-w-0">
+          <a href="{% url 'store:product_detail' item.product.slug %}" class="block">
+            <h3 class="font-display font-semibold text-ink-900 line-clamp-1 hover:text-brand-600 transition">{{ item.product.name }}</h3>
+          </a>
+          <div class="text-xs text-ink-500 mt-0.5">{{ item.product.subcategory.name }}</div>
+          <div class="mt-2 text-sm text-ink-700">{{ item.product.price }} <span class="text-xs text-ink-500">TK each</span></div>
+        </div>
+
+        <!-- Quantity stepper (HTMX) -->
+        <div class="inline-flex items-center bg-ink-100 rounded-full p-1 shrink-0">
+          <button type="button"
+                  hx-post="{% url 'orders:cart_update' item.product.id %}"
+                  hx-vals='{"quantity": "{{ item.quantity|add:-1 }}"}'
+                  hx-target="#cart-body"
+                  hx-swap="outerHTML"
+                  class="w-8 h-8 rounded-full bg-white shadow-sm text-ink-700 hover:bg-brand-500 hover:text-white transition disabled:opacity-40"
+                  {% if item.quantity <= 1 %}disabled{% endif %}>
+            <i class="fas fa-minus text-xs"></i>
+          </button>
+          <span class="w-10 text-center text-sm font-bold text-ink-900">{{ item.quantity }}</span>
+          <button type="button"
+                  hx-post="{% url 'orders:cart_update' item.product.id %}"
+                  hx-vals='{"quantity": "{{ item.quantity|add:1 }}"}'
+                  hx-target="#cart-body"
+                  hx-swap="outerHTML"
+                  class="w-8 h-8 rounded-full bg-white shadow-sm text-ink-700 hover:bg-brand-500 hover:text-white transition disabled:opacity-40"
+                  {% if item.quantity >= item.product.stock %}disabled{% endif %}>
+            <i class="fas fa-plus text-xs"></i>
+          </button>
+        </div>
+
+        <!-- Subtotal + remove -->
+        <div class="flex items-center gap-4 sm:flex-col sm:items-end sm:gap-2 shrink-0 sm:w-28">
+          <div class="font-display font-extrabold text-ink-900">{{ item.get_cost }} <span class="text-xs font-semibold text-ink-500">TK</span></div>
+          <button type="button"
+                  hx-post="{% url 'orders:cart_remove' item.product.id %}"
+                  hx-target="#cart-body"
+                  hx-swap="outerHTML"
+                  hx-confirm="Remove this item from your cart?"
+                  class="inline-flex items-center gap-1 text-xs font-medium text-rose-600 hover:text-rose-700">
+            <i class="fas fa-trash-can"></i> Remove
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+
+      <a href="{% url 'store:home' %}" class="inline-flex items-center gap-2 mt-2 text-sm font-semibold text-brand-600 hover:text-brand-700">
+        <i class="fas fa-arrow-left text-xs"></i> Continue shopping
+      </a>
+    </div>
+
+    <!-- Summary -->
+    <aside class="lg:col-span-1">
+      <div class="lg:sticky lg:top-24 bg-white rounded-2xl ring-1 ring-ink-100 shadow-card p-6">
+        <h3 class="font-display text-lg font-bold text-ink-900">Order Summary</h3>
+        <div class="mt-4 space-y-3 text-sm">
+          <div class="flex justify-between text-ink-700">
+            <span>Subtotal</span>
+            <span class="font-semibold">{{ cart.get_total_price }} TK</span>
+          </div>
+          <div class="flex justify-between text-ink-700">
+            <span>Shipping</span>
+            <span class="font-semibold text-emerald-600">Free</span>
+          </div>
+          <div class="border-t border-ink-100 pt-3 flex justify-between text-base">
+            <span class="font-semibold text-ink-900">Total</span>
+            <span class="font-display font-extrabold text-ink-900">{{ cart.get_total_price }} TK</span>
+          </div>
+        </div>
+        <a href="{% url 'orders:checkout' %}" class="mt-6 w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold shadow-glow transition">
+          <i class="fas fa-lock text-xs"></i> Secure Checkout
+        </a>
+        <div class="mt-4 flex items-center justify-center gap-2 text-xs text-ink-500">
+          <i class="fas fa-shield-halved text-brand-500"></i> Encrypted &amp; secure payment
+        </div>
+      </div>
+    </aside>
+  </div>
+  {% else %}
+  <div class="bg-white rounded-3xl ring-1 ring-ink-100 shadow-card text-center py-20 px-6">
+    <div class="mx-auto w-20 h-20 rounded-full bg-brand-50 text-brand-500 inline-flex items-center justify-center mb-4">
+      <i class="fas fa-bag-shopping text-3xl"></i>
+    </div>
+    <h3 class="font-display text-2xl font-bold text-ink-900">Your cart is empty</h3>
+    <p class="text-ink-500 mt-2">Looks like you haven't added any products yet. Let's fix that.</p>
+    <a href="{% url 'store:home' %}" class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold shadow-glow transition">
+      <i class="fas fa-paw"></i> Start Shopping
+    </a>
+  </div>
+  {% endif %}
+</div>
