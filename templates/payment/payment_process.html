@@ -1,153 +1,169 @@
 {% extends 'base.html' %}
 
-{% block title %}Payment Process | Ameaozon{% endblock %}
+{% block title %}Payment | Ameaozon{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h3 class="mb-0">Payment for Order #{{ order.tracking_number }}</h3>
-            </div>
-            <div class="card-body">
-                <div class="alert alert-info">
-                    <h5>Order Total: <strong>{{ order.total_price }} TK</strong></h5>
-                    <p>Payment Method: <strong>{{ payment_method }}</strong></p>
-                </div>
-                
-                <div class="row">
-                    <!-- bKash Payment Form -->
-                    {% if order.payment_method == 'bkash' %}
-                    <div class="col-md-8 mx-auto">
-                        <div class="card border-danger">
-                            <div class="card-header bg-danger text-white text-center">
-                                <h4>bKash Payment</h4>
-                            </div>
-                            <div class="card-body">
-                                <form method="post" action="{% url 'payment:payment_complete' order.tracking_number %}">
-                                    {% csrf_token %}
-                                    <div class="mb-3">
-                                        <label for="bkash_number" class="form-label">bKash Number</label>
-                                        <input type="text" class="form-control" id="bkash_number" name="bkash_number" placeholder="01XXXXXXXXX" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="transaction_id" class="form-label">Transaction ID</label>
-                                        <input type="text" class="form-control" id="transaction_id" name="transaction_id" required>
-                                    </div>
-                                    <div class="d-grid gap-2">
-                                        <button type="submit" class="btn btn-danger">Complete Payment</button>
-                                    </div>
-                                </form>
-                                <div class="mt-3">
-                                    <p class="small text-muted">Please send {{ order.total_price }} TK to our bKash merchant number: <strong>01XXXXXXXXX</strong> and provide the transaction ID above.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Nagad Payment Form -->
-                    {% elif order.payment_method == 'nagad' %}
-                    <div class="col-md-8 mx-auto">
-                        <div class="card border-warning">
-                            <div class="card-header bg-warning text-white text-center">
-                                <h4>Nagad Payment</h4>
-                            </div>
-                            <div class="card-body">
-                                <form method="post" action="{% url 'payment:payment_complete' order.tracking_number %}">
-                                    {% csrf_token %}
-                                    <div class="mb-3">
-                                        <label for="nagad_number" class="form-label">Nagad Number</label>
-                                        <input type="text" class="form-control" id="nagad_number" name="nagad_number" placeholder="01XXXXXXXXX" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="transaction_id" class="form-label">Transaction ID</label>
-                                        <input type="text" class="form-control" id="transaction_id" name="transaction_id" required>
-                                    </div>
-                                    <div class="d-grid gap-2">
-                                        <button type="submit" class="btn btn-warning text-white">Complete Payment</button>
-                                    </div>
-                                </form>
-                                <div class="mt-3">
-                                    <p class="small text-muted">Please send {{ order.total_price }} TK to our Nagad merchant number: <strong>01XXXXXXXXX</strong> and provide the transaction ID above.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Rocket Payment Form -->
-                    {% elif order.payment_method == 'rocket' %}
-                    <div class="col-md-8 mx-auto">
-                        <div class="card border-primary">
-                            <div class="card-header bg-primary text-white text-center">
-                                <h4>Rocket Payment</h4>
-                            </div>
-                            <div class="card-body">
-                                <form method="post" action="{% url 'payment:payment_complete' order.tracking_number %}">
-                                    {% csrf_token %}
-                                    <div class="mb-3">
-                                        <label for="rocket_number" class="form-label">Rocket Number</label>
-                                        <input type="text" class="form-control" id="rocket_number" name="rocket_number" placeholder="01XXXXXXXXX" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="transaction_id" class="form-label">Transaction ID</label>
-                                        <input type="text" class="form-control" id="transaction_id" name="transaction_id" required>
-                                    </div>
-                                    <div class="d-grid gap-2">
-                                        <button type="submit" class="btn btn-primary">Complete Payment</button>
-                                    </div>
-                                </form>
-                                <div class="mt-3">
-                                    <p class="small text-muted">Please send {{ order.total_price }} TK to our Rocket merchant number: <strong>01XXXXXXXXX</strong> and provide the transaction ID above.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Card Payment Form -->
-                    {% elif order.payment_method == 'card' %}
-                    <div class="col-md-8 mx-auto">
-                        <div class="card border-success">
-                            <div class="card-header bg-success text-white text-center">
-                                <h4>Credit/Debit Card Payment</h4>
-                            </div>
-                            <div class="card-body">
-                                <form method="post" action="{% url 'payment:payment_complete' order.tracking_number %}">
-                                    {% csrf_token %}
-                                    <div class="mb-3">
-                                        <label for="card_number" class="form-label">Card Number</label>
-                                        <input type="text" class="form-control" id="card_number" name="card_number" placeholder="XXXX XXXX XXXX XXXX" required>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="expiry" class="form-label">Expiry Date</label>
-                                            <input type="text" class="form-control" id="expiry" name="expiry" placeholder="MM/YY" required>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="cvv" class="form-label">CVV</label>
-                                            <input type="text" class="form-control" id="cvv" name="cvv" placeholder="XXX" required>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="card_holder" class="form-label">Card Holder Name</label>
-                                        <input type="text" class="form-control" id="card_holder" name="card_holder" required>
-                                    </div>
-                                    <div class="d-grid gap-2">
-                                        <button type="submit" class="btn btn-success">Complete Payment</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
-                
-                <div class="text-center mt-4">
-                    <a href="{% url 'payment:payment_canceled' order.tracking_number %}" class="btn btn-outline-danger">
-                        <i class="fas fa-times"></i> Cancel Payment
-                    </a>
-                </div>
-            </div>
-        </div>
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- Progress -->
+  <div class="mb-8 flex items-center justify-center gap-2 text-xs font-medium text-ink-500" data-aos="fade-up">
+    <span class="inline-flex w-7 h-7 rounded-full bg-brand-100 text-brand-600 items-center justify-center font-bold">1</span> Cart
+    <span class="w-8 h-px bg-brand-300"></span>
+    <span class="inline-flex w-7 h-7 rounded-full bg-brand-100 text-brand-600 items-center justify-center font-bold">2</span> Checkout
+    <span class="w-8 h-px bg-brand-300"></span>
+    <span class="inline-flex w-7 h-7 rounded-full bg-brand-500 text-white items-center justify-center font-bold">3</span> Pay
+  </div>
+
+  <!-- Header -->
+  <div class="mb-8 text-center" data-aos="fade-up">
+    <p class="text-xs font-semibold uppercase tracking-wider text-brand-600">Complete your purchase</p>
+    <h1 class="font-display text-3xl sm:text-4xl font-extrabold text-ink-900">Payment</h1>
+  </div>
+
+  <!-- Order Info Banner -->
+  <div class="bg-brand-50 border border-brand-100 rounded-2xl p-5 mb-6 flex flex-wrap items-center justify-between gap-4" data-aos="fade-up" data-aos-delay="50">
+    <div>
+      <p class="text-sm text-ink-700">Order <span class="font-display font-bold text-ink-900">#{{ order.tracking_number }}</span></p>
+      <p class="text-xs text-ink-500 mt-0.5">{{ payment_method }}</p>
     </div>
+    <div class="font-display text-2xl font-extrabold text-ink-900">{{ order.total_price }} <span class="text-sm font-semibold text-ink-500">TK</span></div>
+  </div>
+
+  <!-- Payment Forms -->
+  <div data-aos="fade-up" data-aos-delay="100">
+
+    {% if order.payment_method == 'bkash' %}
+    <div class="bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden">
+      <div class="px-6 py-4 border-b border-ink-100 bg-gradient-to-r from-rose-500 to-rose-600 text-white flex items-center gap-2">
+        <i class="fas fa-mobile-alt"></i>
+        <h2 class="font-display text-lg font-bold">bKash Payment</h2>
+      </div>
+      <div class="p-6">
+        <form method="post" action="{% url 'payment:payment_complete' order.tracking_number %}" class="space-y-4">
+          {% csrf_token %}
+          <div>
+            <label for="bkash_number" class="block text-sm font-medium text-ink-700 mb-1.5">bKash Number</label>
+            <input type="text" id="bkash_number" name="bkash_number" placeholder="01XXXXXXXXX" required
+                   class="w-full px-4 py-3 rounded-xl bg-ink-50 border border-ink-200 text-sm outline-none focus:bg-white focus:border-brand-400 focus:ring-2 focus:ring-brand-200 transition">
+          </div>
+          <div>
+            <label for="transaction_id" class="block text-sm font-medium text-ink-700 mb-1.5">Transaction ID</label>
+            <input type="text" id="transaction_id" name="transaction_id" required
+                   class="w-full px-4 py-3 rounded-xl bg-ink-50 border border-ink-200 text-sm outline-none focus:bg-white focus:border-brand-400 focus:ring-2 focus:ring-brand-200 transition">
+          </div>
+          <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-semibold shadow-glow transition">
+            <i class="fas fa-check-circle"></i> Complete Payment
+          </button>
+        </form>
+        <p class="mt-4 text-xs text-ink-500 text-center">Please send {{ order.total_price }} TK to our bKash merchant number: <strong class="text-ink-700">01XXXXXXXXX</strong> and provide the transaction ID above.</p>
+      </div>
+    </div>
+
+    {% elif order.payment_method == 'nagad' %}
+    <div class="bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden">
+      <div class="px-6 py-4 border-b border-ink-100 bg-gradient-to-r from-amber-500 to-amber-600 text-white flex items-center gap-2">
+        <i class="fas fa-wallet"></i>
+        <h2 class="font-display text-lg font-bold">Nagad Payment</h2>
+      </div>
+      <div class="p-6">
+        <form method="post" action="{% url 'payment:payment_complete' order.tracking_number %}" class="space-y-4">
+          {% csrf_token %}
+          <div>
+            <label for="nagad_number" class="block text-sm font-medium text-ink-700 mb-1.5">Nagad Number</label>
+            <input type="text" id="nagad_number" name="nagad_number" placeholder="01XXXXXXXXX" required
+                   class="w-full px-4 py-3 rounded-xl bg-ink-50 border border-ink-200 text-sm outline-none focus:bg-white focus:border-brand-400 focus:ring-2 focus:ring-brand-200 transition">
+          </div>
+          <div>
+            <label for="transaction_id" class="block text-sm font-medium text-ink-700 mb-1.5">Transaction ID</label>
+            <input type="text" id="transaction_id" name="transaction_id" required
+                   class="w-full px-4 py-3 rounded-xl bg-ink-50 border border-ink-200 text-sm outline-none focus:bg-white focus:border-brand-400 focus:ring-2 focus:ring-brand-200 transition">
+          </div>
+          <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-semibold shadow-glow transition">
+            <i class="fas fa-check-circle"></i> Complete Payment
+          </button>
+        </form>
+        <p class="mt-4 text-xs text-ink-500 text-center">Please send {{ order.total_price }} TK to our Nagad merchant number: <strong class="text-ink-700">01XXXXXXXXX</strong> and provide the transaction ID above.</p>
+      </div>
+    </div>
+
+    {% elif order.payment_method == 'rocket' %}
+    <div class="bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden">
+      <div class="px-6 py-4 border-b border-ink-100 bg-gradient-to-r from-violet-500 to-violet-600 text-white flex items-center gap-2">
+        <i class="fas fa-rocket"></i>
+        <h2 class="font-display text-lg font-bold">Rocket Payment</h2>
+      </div>
+      <div class="p-6">
+        <form method="post" action="{% url 'payment:payment_complete' order.tracking_number %}" class="space-y-4">
+          {% csrf_token %}
+          <div>
+            <label for="rocket_number" class="block text-sm font-medium text-ink-700 mb-1.5">Rocket Number</label>
+            <input type="text" id="rocket_number" name="rocket_number" placeholder="01XXXXXXXXX" required
+                   class="w-full px-4 py-3 rounded-xl bg-ink-50 border border-ink-200 text-sm outline-none focus:bg-white focus:border-brand-400 focus:ring-2 focus:ring-brand-200 transition">
+          </div>
+          <div>
+            <label for="transaction_id" class="block text-sm font-medium text-ink-700 mb-1.5">Transaction ID</label>
+            <input type="text" id="transaction_id" name="transaction_id" required
+                   class="w-full px-4 py-3 rounded-xl bg-ink-50 border border-ink-200 text-sm outline-none focus:bg-white focus:border-brand-400 focus:ring-2 focus:ring-brand-200 transition">
+          </div>
+          <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-violet-500 hover:bg-violet-600 text-white font-semibold shadow-glow transition">
+            <i class="fas fa-check-circle"></i> Complete Payment
+          </button>
+        </form>
+        <p class="mt-4 text-xs text-ink-500 text-center">Please send {{ order.total_price }} TK to our Rocket merchant number: <strong class="text-ink-700">01XXXXXXXXX</strong> and provide the transaction ID above.</p>
+      </div>
+    </div>
+
+    {% elif order.payment_method == 'card' %}
+    <div class="bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden">
+      <div class="px-6 py-4 border-b border-ink-100 bg-gradient-to-r from-blue-500 to-blue-600 text-white flex items-center gap-2">
+        <i class="fas fa-credit-card"></i>
+        <h2 class="font-display text-lg font-bold">Card Payment</h2>
+      </div>
+      <div class="p-6">
+        <form method="post" action="{% url 'payment:payment_complete' order.tracking_number %}" class="space-y-4">
+          {% csrf_token %}
+          <div>
+            <label for="card_number" class="block text-sm font-medium text-ink-700 mb-1.5">Card Number</label>
+            <input type="text" id="card_number" name="card_number" placeholder="XXXX XXXX XXXX XXXX" required
+                   class="w-full px-4 py-3 rounded-xl bg-ink-50 border border-ink-200 text-sm outline-none focus:bg-white focus:border-brand-400 focus:ring-2 focus:ring-brand-200 transition">
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="expiry" class="block text-sm font-medium text-ink-700 mb-1.5">Expiry Date</label>
+              <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required
+                     class="w-full px-4 py-3 rounded-xl bg-ink-50 border border-ink-200 text-sm outline-none focus:bg-white focus:border-brand-400 focus:ring-2 focus:ring-brand-200 transition">
+            </div>
+            <div>
+              <label for="cvv" class="block text-sm font-medium text-ink-700 mb-1.5">CVV</label>
+              <input type="text" id="cvv" name="cvv" placeholder="XXX" required
+                     class="w-full px-4 py-3 rounded-xl bg-ink-50 border border-ink-200 text-sm outline-none focus:bg-white focus:border-brand-400 focus:ring-2 focus:ring-brand-200 transition">
+            </div>
+          </div>
+          <div>
+            <label for="card_holder" class="block text-sm font-medium text-ink-700 mb-1.5">Card Holder Name</label>
+            <input type="text" id="card_holder" name="card_holder" required
+                   class="w-full px-4 py-3 rounded-xl bg-ink-50 border border-ink-200 text-sm outline-none focus:bg-white focus:border-brand-400 focus:ring-2 focus:ring-brand-200 transition">
+          </div>
+          <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow-glow transition">
+            <i class="fas fa-lock text-xs"></i> Complete Payment
+          </button>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Cancel -->
+    <div class="mt-6 text-center">
+      <a href="{% url 'payment:payment_canceled' order.tracking_number %}" class="inline-flex items-center gap-2 text-sm font-semibold text-ink-500 hover:text-rose-600 transition">
+        <i class="fas fa-times text-xs"></i> Cancel Payment
+      </a>
+    </div>
+
+    <!-- Security badge -->
+    <div class="mt-6 flex items-center justify-center gap-2 text-xs text-ink-500">
+      <i class="fas fa-shield-halved text-brand-500"></i>
+      <span>All transactions are secured with 256-bit encryption</span>
+    </div>
+  </div>
 </div>
 {% endblock %}
