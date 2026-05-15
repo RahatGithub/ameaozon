@@ -62,37 +62,27 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Create a `.env` file in the project root with the following variables:
-```
-SECRET_KEY=your_secret_key
-DEBUG=True
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-```
-
-5. Run migrations
+4. Run migrations
 ```bash
 python manage.py migrate
 ```
 
-6. Set up initial data
+5. Set up initial data
 ```bash
 python manage.py setup_initial_data
-python manage.py setup_demo_products
 ```
 
-7. Create a superuser
+6. Create a superuser
 ```bash
 python manage.py createsuperuser
 ```
 
-8. Run the development server
+7. Run the development server
 ```bash
 python manage.py runserver
 ```
 
-9. Visit http://127.0.0.1:8000/ in your browser
+8. Visit http://127.0.0.1:8000/ in your browser
 
 ## Project Structure
 
@@ -109,7 +99,7 @@ ameaozon/
 ├── ameaozon/            # Project settings
 ├── manage.py            # Django management script
 ├── requirements.txt     # Project dependencies
-└── README.md            # This file
+└── readme.md            # This file
 ```
 
 ## Screenshots
