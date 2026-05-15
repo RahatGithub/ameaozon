@@ -1,8 +1,8 @@
 # Ameaozon - Pet Shop E-commerce Platform
 
-![Ameaozon Logo](static/images/logo-transparent.png)
-
 A comprehensive e-commerce platform designed for pet shops, built with Django. Ameaozon offers a complete solution for managing pet products, customer orders, and inventory.
+
+![Ameaozon Logo](static/images/thumbnail.png)
 
 ## Screen Recording
 Watch the screen-recorded walkthrough: https://photos.app.goo.gl/3UAWmNj3Mmq1y85j7 
