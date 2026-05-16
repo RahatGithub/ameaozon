@@ -59,20 +59,6 @@
             <div class="swiper-slide relative">
               <img src="{% static 'images/carousel/carousel3.png' %}" alt="Easy Payment, Your Way" class="w-full h-[420px] object-cover">
             </div>
-            <!-- Dynamic carousel images from dashboard -->
-            {% for image in carousel_images %}
-              <div class="swiper-slide relative">
-                {% if image.link %}<a href="{{ image.link }}">{% endif %}
-                  <img src="{{ image.image.url }}" alt="{{ image.title }}" class="w-full h-[420px] object-cover">
-                {% if image.link %}</a>{% endif %}
-                {% if image.title or image.subtitle %}
-                <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/70 via-black/30 to-transparent text-white">
-                  {% if image.title %}<h3 class="font-display text-2xl font-bold">{{ image.title }}</h3>{% endif %}
-                  {% if image.subtitle %}<p class="text-sm opacity-90">{{ image.subtitle }}</p>{% endif %}
-                </div>
-                {% endif %}
-              </div>
-            {% endfor %}
           </div>
           <div class="swiper-pagination !bottom-3"></div>
           <div class="swiper-button-prev !text-white !w-10 !h-10 after:!text-base"></div>
