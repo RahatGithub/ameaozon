@@ -5,11 +5,13 @@
 
 {% block content %}
 <!-- HERO -->
-<section class="relative overflow-hidden">
-  <div class="blob bg-brand-300 w-[420px] h-[420px] -top-32 -left-20"></div>
-  <div class="blob bg-amber-200 w-[360px] h-[360px] top-20 right-0"></div>
+<section class="relative">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="blob bg-brand-300 w-[420px] h-[420px] -top-32 -left-20"></div>
+    <div class="blob bg-amber-200 w-[360px] h-[360px] top-20 right-0"></div>
+  </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16">
     <div class="grid lg:grid-cols-2 gap-10 items-center">
       <div data-aos="fade-right">
         <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-semibold uppercase tracking-wide">
