@@ -117,7 +117,7 @@
 
         {% if product.stock > 0 %}
         <!-- Add to cart form -->
-        <form action="{% url 'orders:cart_add' product.id %}" method="post" class="mt-6 flex flex-wrap items-center gap-3">
+        <form hx-post="{% url 'orders:cart_add' product.id %}" hx-swap="none" class="mt-6 flex flex-wrap items-center gap-3">
           {% csrf_token %}
           <!-- Alpine quantity stepper -->
           <div class="inline-flex items-center bg-ink-100 rounded-full p-1">

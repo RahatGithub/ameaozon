@@ -101,6 +101,9 @@
       .htmx-indicator { opacity: 0; transition: opacity 200ms; }
       .htmx-request .htmx-indicator,
       .htmx-request.htmx-indicator { opacity: 1; }
+      /* Toast slide-in animation */
+      @keyframes slide-in { from { opacity:0; transform: translateX(1rem); } to { opacity:1; transform: translateX(0); } }
+      .animate-slide-in { animation: slide-in .3s ease-out; }
       /* Subtle gradient blobs */
       .blob {
         position: absolute; border-radius: 9999px; filter: blur(60px); opacity: .35; pointer-events:none;
@@ -110,6 +113,9 @@
     </style>
 </head>
 <body x-data="{ mobileOpen: false, userOpen: false, catsOpen: false }" class="font-sans antialiased">
+
+    <!-- Toast container for HTMX notifications -->
+    <div id="cart-toast"></div>
 
     <!-- Navbar -->
     <nav class="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-white/80 border-b border-ink-200/70 shadow-sm">
@@ -156,9 +162,11 @@
           <div class="flex items-center gap-1">
             <a href="{% url 'orders:cart_detail' %}" class="relative px-3 py-2 text-ink-700 hover:text-brand-600 transition">
               <i class="fas fa-shopping-bag text-lg"></i>
-              {% if cart_count %}
-                <span class="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1 text-[10px] font-bold text-white bg-brand-500 rounded-full ring-2 ring-white">{{ cart_count }}</span>
-              {% endif %}
+              <span id="cart-badge">
+                {% if cart_count %}
+                  <span class="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1 text-[10px] font-bold text-white bg-brand-500 rounded-full ring-2 ring-white">{{ cart_count }}</span>
+                {% endif %}
+              </span>
             </a>
 
             {% if user.is_authenticated %}

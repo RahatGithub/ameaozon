@@ -28,39 +28,58 @@ def cart_detail(request):
 @login_required
 def cart_add(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    
+
     # Check if product is available and in stock
     if not product.is_available or product.stock <= 0:
+        if request.headers.get('HX-Request'):
+            return render(request, 'orders/_cart_add_oob.html', {
+                'message': 'Sorry, this product is not available.',
+                'cart_count': _get_cart_count(request),
+            })
         messages.error(request, "Sorry, this product is not available or out of stock.")
         return redirect('store:product_detail', product_slug=product.slug)
-    
+
     cart, created = Cart.objects.get_or_create(user=request.user)
-    
+
     # Get quantity from form
     try:
         quantity = int(request.POST.get('quantity', 1))
     except (ValueError, TypeError):
         quantity = 1
-    
+
     # Check if quantity is valid
     if quantity <= 0:
         quantity = 1
     if quantity > product.stock:
         quantity = product.stock
-    
+
     # Check if product already in cart
     try:
         cart_item = CartItem.objects.get(cart=cart, product=product)
         # Update quantity
         cart_item.quantity = quantity
         cart_item.save()
-        messages.success(request, f"'{product.name}' quantity updated in your cart.")
+        msg = f"'{product.name}' quantity updated in your cart."
     except CartItem.DoesNotExist:
         # Add new item to cart
         CartItem.objects.create(cart=cart, product=product, quantity=quantity)
-        messages.success(request, f"'{product.name}' added to your cart.")
-    
+        msg = f"'{product.name}' added to your cart."
+
+    if request.headers.get('HX-Request'):
+        return render(request, 'orders/_cart_add_oob.html', {
+            'message': msg,
+            'cart_count': _get_cart_count(request),
+        })
+    messages.success(request, msg)
     return redirect('orders:cart_detail')
+
+def _get_cart_count(request):
+    try:
+        cart = Cart.objects.get(user=request.user)
+        return cart.get_total_items()
+    except Cart.DoesNotExist:
+        return 0
+
 
 def _render_cart_partial(request):
     try:
@@ -69,7 +88,11 @@ def _render_cart_partial(request):
     except Cart.DoesNotExist:
         cart = None
         cart_items = []
-    return render(request, 'orders/_cart_body.html', {'cart': cart, 'cart_items': cart_items})
+    return render(request, 'orders/_cart_body.html', {
+        'cart': cart,
+        'cart_items': cart_items,
+        'cart_count': _get_cart_count(request),
+    })
 
 
 @login_required
