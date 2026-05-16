@@ -114,6 +114,9 @@
 </head>
 <body x-data="{ mobileOpen: false, userOpen: false, catsOpen: false }" class="font-sans antialiased">
 
+    <!-- Cart state for Alpine components -->
+    <script>window._cartMap = { {% for pid, qty in cart_items_map.items %}{{ pid }}:{{ qty }}{% if not forloop.last %},{% endif %}{% endfor %} };</script>
+
     <!-- Toast container for HTMX notifications -->
     <div id="cart-toast"></div>
 
@@ -292,6 +295,50 @@
       document.body.addEventListener('htmx:configRequest', (event) => {
         event.detail.headers['X-CSRFToken'] = _getCookie('csrftoken');
       });
+
+      /* ---- Cart button component for product cards ---- */
+      function _updateBadge(count) {
+        const badge = document.getElementById('cart-badge');
+        if (!badge) return;
+        badge.innerHTML = count > 0
+          ? '<span class="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1 text-[10px] font-bold text-white bg-brand-500 rounded-full ring-2 ring-white">' + count + '</span>'
+          : '';
+      }
+      function cartBtn(cfg) {
+        return {
+          pid: cfg.id, stock: cfg.stock, qty: (window._cartMap && window._cartMap[cfg.id]) || 0,
+          get inCart() { return this.qty > 0; },
+          async _post(url, body) {
+            const res = await fetch(url, {
+              method: 'POST',
+              headers: { 'X-CSRFToken': _getCookie('csrftoken'), 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: new URLSearchParams(body)
+            });
+            if (res.redirected || !res.ok) { window.location.href = res.url || '/accounts/login/'; return null; }
+            const ct = res.headers.get('content-type') || '';
+            if (!ct.includes('application/json')) { window.location.href = '/accounts/login/'; return null; }
+            return await res.json();
+          },
+          async add() {
+            const d = await this._post('/orders/add/' + this.pid + '/', { quantity: 1 });
+            if (d) { this.qty = d.qty; _updateBadge(d.cart_count); }
+          },
+          async inc() {
+            if (this.qty >= this.stock) return;
+            const d = await this._post('/orders/update/' + this.pid + '/', { quantity: this.qty + 1 });
+            if (d) { this.qty = d.qty; _updateBadge(d.cart_count); }
+          },
+          async dec() {
+            if (this.qty <= 1) {
+              const d = await this._post('/orders/remove/' + this.pid + '/', {});
+              if (d) { this.qty = 0; _updateBadge(d.cart_count); }
+            } else {
+              const d = await this._post('/orders/update/' + this.pid + '/', { quantity: this.qty - 1 });
+              if (d) { this.qty = d.qty; _updateBadge(d.cart_count); }
+            }
+          }
+        };
+      }
     </script>
     {% block scripts %}{% endblock %}
 </body>

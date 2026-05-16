@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import F
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from .models import Cart, CartItem, Order, OrderItem
 from .forms import OrderForm
 from store.models import Product
@@ -28,9 +28,12 @@ def cart_detail(request):
 @login_required
 def cart_add(request, product_id):
     product = get_object_or_404(Product, id=product_id)
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
     # Check if product is available and in stock
     if not product.is_available or product.stock <= 0:
+        if is_ajax:
+            return JsonResponse({'error': 'Not available', 'cart_count': _get_cart_count(request)})
         if request.headers.get('HX-Request'):
             return render(request, 'orders/_cart_add_oob.html', {
                 'message': 'Sorry, this product is not available.',
@@ -56,21 +59,19 @@ def cart_add(request, product_id):
     # Check if product already in cart
     try:
         cart_item = CartItem.objects.get(cart=cart, product=product)
-        # Update quantity
         cart_item.quantity = quantity
         cart_item.save()
-        msg = f"'{product.name}' quantity updated in your cart."
     except CartItem.DoesNotExist:
-        # Add new item to cart
         CartItem.objects.create(cart=cart, product=product, quantity=quantity)
-        msg = f"'{product.name}' added to your cart."
 
+    if is_ajax:
+        return JsonResponse({'qty': quantity, 'cart_count': _get_cart_count(request)})
     if request.headers.get('HX-Request'):
         return render(request, 'orders/_cart_add_oob.html', {
-            'message': msg,
+            'message': f"'{product.name}' added to your cart.",
             'cart_count': _get_cart_count(request),
         })
-    messages.success(request, msg)
+    messages.success(request, f"'{product.name}' added to your cart.")
     return redirect('orders:cart_detail')
 
 def _get_cart_count(request):
@@ -98,16 +99,19 @@ def _render_cart_partial(request):
 @login_required
 def cart_remove(request, product_id):
     product = get_object_or_404(Product, id=product_id)
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
     try:
         cart = Cart.objects.get(user=request.user)
         cart_item = CartItem.objects.get(cart=cart, product=product)
         cart_item.delete()
-        if not request.headers.get('HX-Request'):
+        if not request.headers.get('HX-Request') and not is_ajax:
             messages.success(request, f"'{product.name}' removed from your cart.")
     except (Cart.DoesNotExist, CartItem.DoesNotExist):
         pass
 
+    if is_ajax:
+        return JsonResponse({'qty': 0, 'cart_count': _get_cart_count(request)})
     if request.headers.get('HX-Request'):
         return _render_cart_partial(request)
     return redirect('orders:cart_detail')
@@ -116,6 +120,8 @@ def cart_remove(request, product_id):
 @login_required
 def cart_update(request, product_id):
     product = get_object_or_404(Product, id=product_id)
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    final_qty = 0
 
     try:
         cart = Cart.objects.get(user=request.user)
@@ -123,23 +129,27 @@ def cart_update(request, product_id):
 
         quantity = int(request.POST.get('quantity', 1))
 
-        # Validate quantity
         if quantity <= 0:
             cart_item.delete()
-            if not request.headers.get('HX-Request'):
+            final_qty = 0
+            if not request.headers.get('HX-Request') and not is_ajax:
                 messages.success(request, f"'{product.name}' removed from your cart.")
         else:
             if quantity > product.stock:
                 quantity = product.stock
-                if not request.headers.get('HX-Request'):
+                if not request.headers.get('HX-Request') and not is_ajax:
                     messages.warning(request, f"Only {product.stock} of '{product.name}' available.")
 
             cart_item.quantity = quantity
             cart_item.save()
-            if not request.headers.get('HX-Request'):
+            final_qty = quantity
+            if not request.headers.get('HX-Request') and not is_ajax:
                 messages.success(request, f"'{product.name}' quantity updated.")
     except (Cart.DoesNotExist, CartItem.DoesNotExist):
         pass
+
+    if is_ajax:
+        return JsonResponse({'qty': final_qty, 'cart_count': _get_cart_count(request)})
 
     if request.headers.get('HX-Request'):
         return _render_cart_partial(request)

@@ -1,11 +1,14 @@
 {% include "orders/_cart_badge_oob.html" %}
 <div id="cart-toast" hx-swap-oob="innerHTML">
-  <div class="fixed top-6 right-6 z-[9999] animate-slide-in bg-white rounded-xl shadow-lg ring-1 ring-ink-100 p-4 flex items-center gap-3 max-w-xs"
+  <div class="fixed top-6 right-6 z-[9999] animate-slide-in bg-white rounded-xl shadow-lg ring-1 ring-ink-100 p-4 pr-10 flex items-center gap-3 max-w-xs"
        x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
        x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 translate-x-4">
     <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
       <i class="fas fa-check text-sm"></i>
     </div>
     <p class="text-sm font-medium text-ink-800">{{ message }}</p>
+    <button @click="show = false" class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full text-ink-400 hover:text-ink-700 hover:bg-ink-100 transition">
+      <i class="fas fa-xmark text-xs"></i>
+    </button>
   </div>
 </div>

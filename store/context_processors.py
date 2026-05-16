@@ -18,3 +18,14 @@ def cart_count(request):
         except Cart.DoesNotExist:
             count = 0
     return {'cart_count': count}
+
+def cart_items_map(request):
+    cart_map = {}
+    if request.user.is_authenticated:
+        try:
+            cart = Cart.objects.get(user=request.user)
+            for item in cart.items.all():
+                cart_map[item.product_id] = item.quantity
+        except Cart.DoesNotExist:
+            pass
+    return {'cart_items_map': cart_map}
