@@ -15,7 +15,7 @@
     <span class="text-ink-700 font-medium line-clamp-1">{{ product.name }}</span>
   </nav>
 
-  <div class="grid lg:grid-cols-12 gap-8" x-data="{ qty: 1, max: {{ product.stock|default:1 }} }">
+  <div class="grid lg:grid-cols-12 gap-8" x-data="{ qty: 0, max: {{ product.stock|default:1 }} }">
 
     <!-- GALLERY -->
     <div class="lg:col-span-6" data-aos="fade-right">
@@ -121,17 +121,17 @@
           {% csrf_token %}
           <!-- Alpine quantity stepper -->
           <div class="inline-flex items-center bg-ink-100 rounded-full p-1">
-            <button type="button" @click="if(qty>1) qty--" class="w-9 h-9 rounded-full bg-white shadow-sm text-ink-700 hover:bg-brand-500 hover:text-white transition">
+            <button type="button" @click="if(qty>0) qty--" class="w-9 h-9 rounded-full bg-white shadow-sm text-ink-700 hover:bg-brand-500 hover:text-white transition disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-ink-700" :disabled="qty <= 0">
               <i class="fas fa-minus text-xs"></i>
             </button>
-            <input type="number" name="quantity" x-model.number="qty" min="1" :max="max" class="w-12 bg-transparent text-center font-semibold outline-none">
-            <button type="button" @click="if(qty<max) qty++" class="w-9 h-9 rounded-full bg-white shadow-sm text-ink-700 hover:bg-brand-500 hover:text-white transition">
+            <input type="number" name="quantity" x-model.number="qty" min="0" :max="max" class="w-12 bg-transparent text-center font-bold text-ink-900 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" readonly>
+            <button type="button" @click="if(qty<max) qty++" class="w-9 h-9 rounded-full bg-white shadow-sm text-ink-700 hover:bg-brand-500 hover:text-white transition disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-ink-700" :disabled="qty >= max">
               <i class="fas fa-plus text-xs"></i>
             </button>
           </div>
 
-          <button type="submit" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold shadow-glow transition">
-            <i class="fas fa-bag-shopping"></i> Add to Cart
+          <button type="submit" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold shadow-glow transition disabled:opacity-50 disabled:cursor-not-allowed" :disabled="qty <= 0">
+            <i class="fas fa-cart-shopping"></i> Add to Cart
           </button>
 
           {% if user.is_authenticated %}
