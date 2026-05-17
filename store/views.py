@@ -57,11 +57,18 @@ def product_detail(request, product_slug):
     if request.method == 'POST' and request.user.is_authenticated:
         form = ReviewForm(request.POST)
         if form.is_valid():
-            review = form.save(commit=False)
-            review.product = product
-            review.user = request.user
-            review.save()
-            messages.success(request, 'Your review has been submitted!')
+            _, created = Review.objects.update_or_create(
+                product=product,
+                user=request.user,
+                defaults={
+                    'rating': form.cleaned_data['rating'],
+                    'comment': form.cleaned_data['comment'],
+                }
+            )
+            if created:
+                messages.success(request, 'Your review has been submitted!')
+            else:
+                messages.success(request, 'Your review has been updated!')
             return redirect('store:product_detail', product_slug=product.slug)
     else:
         form = ReviewForm()

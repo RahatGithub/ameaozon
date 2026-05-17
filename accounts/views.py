@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.views.decorators.http import require_POST
 from .models import User
 from .forms import UserRegisterForm, UserUpdateForm
+from store.models import Wishlist
 
 
 @require_POST
@@ -42,10 +43,10 @@ def profile(request):
 def customer_dashboard(request):
     if request.user.user_type == User.ADMIN:
         return redirect('dashboard:admin_dashboard')
-    
+
     orders = request.user.orders.all().order_by('-created_at')
-    wishlist = request.user.wishlist_set.first()
-    
+    wishlist = Wishlist.objects.filter(user=request.user).first()
+
     context = {
         'orders': orders,
         'wishlist': wishlist,

@@ -97,14 +97,17 @@ class Review(models.Model):
     rating = models.PositiveSmallIntegerField(choices=[(i, i) for i in range(1, 6)])
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
+    class Meta:
+        unique_together = ('product', 'user')
+
     def __str__(self):
         return f"{self.user.username}'s review on {self.product.name}"
 
 class Wishlist(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         return f"{self.user.username}'s wishlist"
