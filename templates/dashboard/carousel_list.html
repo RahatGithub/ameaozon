@@ -46,10 +46,10 @@
               <a href="{% url 'dashboard:carousel_edit' image.id %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-50 hover:bg-brand-100 text-brand-600 text-xs font-semibold transition">
                 <i class="fas fa-pen"></i> Edit
               </a>
-              <a href="{% url 'dashboard:carousel_toggle_active' image.id %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition
+              <form method="post" action="{% url 'dashboard:carousel_toggle_active' image.id %}" class="inline m-0">{% csrf_token %}<button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition
                         {% if image.is_active %}bg-amber-50 hover:bg-amber-100 text-amber-700{% else %}bg-emerald-50 hover:bg-emerald-100 text-emerald-700{% endif %}">
                 {% if image.is_active %}<i class="fas fa-eye-slash"></i> Deactivate{% else %}<i class="fas fa-eye"></i> Activate{% endif %}
-              </a>
+              </button></form>
               <a href="{% url 'dashboard:carousel_delete' image.id %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold transition">
                 <i class="fas fa-trash"></i>
               </a>

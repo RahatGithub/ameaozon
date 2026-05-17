@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib import messages
+from django.views.decorators.http import require_POST
 from .models import User
 from .forms import UserRegisterForm, UserUpdateForm
 
 
-
+@require_POST
 def logout_view(request):
     logout(request)
     messages.success(request, "You have been successfully logged out.")

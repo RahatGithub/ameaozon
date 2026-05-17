@@ -103,9 +103,9 @@
       <a href="{% url 'store:home' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-ink-400 hover:bg-white/5 hover:text-white transition">
         <i class="fas fa-home w-5 text-center"></i> Back to Shop
       </a>
-      <a href="{% url 'accounts:logout' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition">
+      <form method="post" action="{% url 'accounts:logout' %}" class="m-0">{% csrf_token %}<button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition">
         <i class="fas fa-sign-out-alt w-5 text-center"></i> Logout
-      </a>
+      </button></form>
     </nav>
   </aside>
 

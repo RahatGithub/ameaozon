@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Sum, Count
 from django.utils.text import slugify
+from django.views.decorators.http import require_POST
 from accounts.models import User
 from store.models import Category, SubCategory, Product, ProductImage, Review, CarouselImage
 from orders.models import Order, OrderItem
@@ -240,18 +241,18 @@ def order_detail(request, tracking_number):
 
 @login_required
 @admin_required
+@require_POST
 def update_order_status(request, tracking_number):
     order = get_object_or_404(Order, tracking_number=tracking_number)
-    
-    if request.method == 'POST':
-        status = request.POST.get('status')
-        if status in dict(Order.STATUS_CHOICES).keys():
-            order.status = status
-            order.save()
-            messages.success(request, f'Order status updated to "{dict(Order.STATUS_CHOICES)[status]}"')
-        else:
-            messages.error(request, 'Invalid status')
-    
+
+    status = request.POST.get('status')
+    if status in dict(Order.STATUS_CHOICES).keys():
+        order.status = status
+        order.save()
+        messages.success(request, f'Order status updated to "{dict(Order.STATUS_CHOICES)[status]}"')
+    else:
+        messages.error(request, 'Invalid status')
+
     return redirect('dashboard:order_detail', tracking_number=tracking_number)
 
 
@@ -307,14 +308,15 @@ def carousel_edit(request, image_id):
 
 @login_required
 @admin_required
+@require_POST
 def carousel_toggle_active(request, image_id):
     carousel_image = get_object_or_404(CarouselImage, id=image_id)
     carousel_image.is_active = not carousel_image.is_active
     carousel_image.save()
-    
+
     status = "activated" if carousel_image.is_active else "deactivated"
     messages.success(request, f'Carousel image {status} successfully.')
-    
+
     return redirect('dashboard:carousel_list')
 
 @login_required

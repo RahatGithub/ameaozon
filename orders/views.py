@@ -3,12 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import F
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from .models import Cart, CartItem, Order, OrderItem
 from .forms import OrderForm
 from store.models import Product
 from payment.models import Payment
-import uuid
 
 @login_required
 def cart_detail(request):
@@ -26,6 +26,7 @@ def cart_detail(request):
     return render(request, 'orders/cart_detail.html', context)
 
 @login_required
+@require_POST
 def cart_add(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
@@ -97,6 +98,7 @@ def _render_cart_partial(request):
 
 
 @login_required
+@require_POST
 def cart_remove(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
@@ -118,6 +120,7 @@ def cart_remove(request, product_id):
 
 
 @login_required
+@require_POST
 def cart_update(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
@@ -260,20 +263,12 @@ def track_order(request):
     }
     return render(request, 'orders/track_order.html', context)
 
+@login_required
 def track_order_detail(request, tracking_number):
-    try:
-        # If user is logged in, make sure they can only see their own orders
-        if request.user.is_authenticated:
-            order = get_object_or_404(Order, tracking_number=tracking_number, user=request.user)
-        else:
-            order = get_object_or_404(Order, tracking_number=tracking_number)
-        
-        context = {
-            'order': order,
-            'order_items': order.items.all()
-        }
-        return render(request, 'orders/track_order_detail.html', context)
-    
-    except Order.DoesNotExist:
-        messages.error(request, "Invalid tracking number. Please try again.")
-        return redirect('orders:track_order')
+    order = get_object_or_404(Order, tracking_number=tracking_number, user=request.user)
+
+    context = {
+        'order': order,
+        'order_items': order.items.all()
+    }
+    return render(request, 'orders/track_order_detail.html', context)

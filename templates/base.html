@@ -187,7 +187,7 @@
                   <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-sm text-ink-700 hover:bg-brand-50 hover:text-brand-600"><i class="fas fa-user w-4 mr-2"></i>Profile</a>
                   <a href="{% url 'store:wishlist' %}" class="block px-4 py-2 text-sm text-ink-700 hover:bg-brand-50 hover:text-brand-600"><i class="fas fa-heart w-4 mr-2"></i>Wishlist</a>
                   <div class="my-1 border-t border-ink-100"></div>
-                  <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-sm text-ink-700 hover:bg-rose-50 hover:text-rose-600"><i class="fas fa-right-from-bracket w-4 mr-2"></i>Logout</a>
+                  <form method="post" action="{% url 'accounts:logout' %}" class="m-0">{% csrf_token %}<button type="submit" class="w-full text-left block px-4 py-2 text-sm text-ink-700 hover:bg-rose-50 hover:text-rose-600"><i class="fas fa-right-from-bracket w-4 mr-2"></i>Logout</button></form>
                 </div>
               </div>
             {% else %}
