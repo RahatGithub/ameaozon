@@ -24,8 +24,7 @@ def cart_items_map(request):
     if request.user.is_authenticated:
         try:
             cart = Cart.objects.get(user=request.user)
-            for item in cart.items.all():
-                cart_map[item.product_id] = item.quantity
+            cart_map = dict(cart.items.values_list('product_id', 'quantity'))
         except Cart.DoesNotExist:
             pass
     return {'cart_items_map': cart_map}

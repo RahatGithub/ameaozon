@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.views.decorators.http import require_POST
 from django.db.models import Q, Avg
 from django.contrib import messages
@@ -9,39 +10,51 @@ from .forms import ReviewForm
 
 def home(request):
     categories = Category.objects.filter(is_active=True)
-    featured_products = Product.objects.filter(is_available=True)[:8]
-    carousel_images = CarouselImage.objects.all().order_by('order', '-created_at')
-    
+    featured_products = Product.objects.filter(is_available=True).order_by('-created_at')[:8]
+    carousel_images = CarouselImage.objects.filter(is_active=True).order_by('order', '-created_at')
+
     context = {
         'categories': categories,
         'featured_products': featured_products,
-        'carousel_images' : carousel_images,
+        'carousel_images': carousel_images,
     }
     return render(request, 'store/home.html', context)
 
 def category_detail(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug, is_active=True)
     subcategories = category.subcategories.filter(is_active=True)
-    
-    # Get all products from all subcategories of this category
-    products = Product.objects.filter(subcategory__category=category, is_available=True)
-    
+
+    products_qs = Product.objects.filter(
+        subcategory__category=category, is_available=True
+    ).order_by('-created_at')
+    paginator = Paginator(products_qs, 12)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
     context = {
         'category': category,
         'subcategories': subcategories,
-        'products': products,
+        'products': page_obj,
+        'page_obj': page_obj,
+        'page_param': 'page',
     }
     return render(request, 'store/category_detail.html', context)
 
 def subcategory_detail(request, category_slug, subcategory_slug):
     category = get_object_or_404(Category, slug=category_slug, is_active=True)
     subcategory = get_object_or_404(SubCategory, slug=subcategory_slug, category=category, is_active=True)
-    products = Product.objects.filter(subcategory=subcategory, is_available=True)
-    
+
+    products_qs = Product.objects.filter(
+        subcategory=subcategory, is_available=True
+    ).order_by('-created_at')
+    paginator = Paginator(products_qs, 12)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
     context = {
         'category': category,
         'subcategory': subcategory,
-        'products': products,
+        'products': page_obj,
+        'page_obj': page_obj,
+        'page_param': 'page',
     }
     return render(request, 'store/subcategory_detail.html', context)
 
@@ -92,30 +105,34 @@ def product_detail(request, product_slug):
 
 def search(request):
     query = request.GET.get('q', '')
-    products = []
-    
+    page_obj = None
+
     if query:
-        products = Product.objects.filter(
-            Q(name__icontains=query) | 
+        products_qs = Product.objects.filter(
+            Q(name__icontains=query) |
             Q(description__icontains=query) |
             Q(subcategory__name__icontains=query) |
             Q(subcategory__category__name__icontains=query)
-        ).filter(is_available=True).distinct()
-    
+        ).filter(is_available=True).distinct().order_by('-created_at')
+        paginator = Paginator(products_qs, 12)
+        page_obj = paginator.get_page(request.GET.get('page'))
+
     context = {
-        'products': products,
-        'query': query
+        'products': page_obj,
+        'page_obj': page_obj,
+        'page_param': 'page',
+        'query': query,
     }
     return render(request, 'store/search_results.html', context)
 
 @login_required
 def wishlist(request):
-    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-    products = wishlist.products.all()
-    
+    wishlist_obj, created = Wishlist.objects.get_or_create(user=request.user)
+    products = wishlist_obj.products.all().order_by('-id')
+
     context = {
-        'wishlist': wishlist,
-        'products': products
+        'wishlist': wishlist_obj,
+        'products': products,
     }
     return render(request, 'store/wishlist.html', context)
 

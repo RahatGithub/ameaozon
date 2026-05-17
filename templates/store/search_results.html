@@ -16,14 +16,14 @@
   <div class="mb-8" data-aos="fade-up">
     <p class="text-xs font-semibold uppercase tracking-wider text-brand-600">Results for</p>
     <h1 class="font-display text-3xl sm:text-4xl font-extrabold text-ink-900">"{{ query }}"</h1>
-    {% if products %}
-    <p class="text-ink-500 mt-1 text-sm">{{ products|length }} product{{ products|length|pluralize }} found</p>
+    {% if page_obj %}
+    <p class="text-ink-500 mt-1 text-sm">{{ page_obj.paginator.count }} product{{ page_obj.paginator.count|pluralize }} found</p>
     {% endif %}
   </div>
 
-  {% if products %}
+  {% if page_obj %}
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
-    {% for product in products %}
+    {% for product in page_obj %}
     <div data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'50' }}"
          class="group relative bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden flex flex-col transition hover:-translate-y-1 hover:shadow-glow">
       <a href="{% url 'store:product_detail' product.slug %}" class="block relative aspect-square overflow-hidden bg-ink-100">
@@ -73,6 +73,7 @@
     </div>
     {% endfor %}
   </div>
+  {% include 'includes/pagination.html' %}
   {% else %}
   <div class="bg-white rounded-3xl ring-1 ring-ink-100 shadow-card text-center py-20 px-6" data-aos="fade-up">
     <div class="mx-auto w-20 h-20 rounded-full bg-brand-50 text-brand-500 inline-flex items-center justify-center mb-4">

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.db.models import Sum, Count
 from django.utils.text import slugify
 from django.views.decorators.http import require_POST
@@ -45,9 +46,13 @@ def admin_dashboard(request):
 @login_required
 @admin_required
 def category_list(request):
-    categories = Category.objects.all()
+    categories_qs = Category.objects.all().order_by('-created_at')
+    paginator = Paginator(categories_qs, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
     context = {
-        'categories': categories
+        'categories': page_obj,
+        'page_obj': page_obj,
+        'page_param': 'page',
     }
     return render(request, 'dashboard/category_list.html', context)
 
@@ -97,9 +102,13 @@ def category_edit(request, category_id):
 @login_required
 @admin_required
 def subcategory_list(request):
-    subcategories = SubCategory.objects.all()
+    subcategories_qs = SubCategory.objects.all().order_by('-created_at')
+    paginator = Paginator(subcategories_qs, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
     context = {
-        'subcategories': subcategories
+        'subcategories': page_obj,
+        'page_obj': page_obj,
+        'page_param': 'page',
     }
     return render(request, 'dashboard/subcategory_list.html', context)
 
@@ -149,9 +158,13 @@ def subcategory_edit(request, subcategory_id):
 @login_required
 @admin_required
 def product_list(request):
-    products = Product.objects.all()
+    products_qs = Product.objects.select_related('subcategory__category').all().order_by('-created_at')
+    paginator = Paginator(products_qs, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
     context = {
-        'products': products
+        'products': page_obj,
+        'page_obj': page_obj,
+        'page_param': 'page',
     }
     return render(request, 'dashboard/product_list.html', context)
 
@@ -220,9 +233,13 @@ def product_edit(request, product_id):
 @login_required
 @admin_required
 def order_list(request):
-    orders = Order.objects.all().order_by('-created_at')
+    orders_qs = Order.objects.select_related('user').all().order_by('-created_at')
+    paginator = Paginator(orders_qs, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
     context = {
-        'orders': orders
+        'orders': page_obj,
+        'page_obj': page_obj,
+        'page_param': 'page',
     }
     return render(request, 'dashboard/order_list.html', context)
 
@@ -260,9 +277,13 @@ def update_order_status(request, tracking_number):
 @login_required
 @admin_required
 def carousel_list(request):
-    carousel_images = CarouselImage.objects.all().order_by('order', '-created_at')
+    carousel_qs = CarouselImage.objects.all().order_by('order', '-created_at')
+    paginator = Paginator(carousel_qs, 20)
+    page_obj = paginator.get_page(request.GET.get('page'))
     context = {
-        'carousel_images': carousel_images
+        'carousel_images': page_obj,
+        'page_obj': page_obj,
+        'page_param': 'page',
     }
     return render(request, 'dashboard/carousel_list.html', context)
 
