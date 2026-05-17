@@ -15,7 +15,7 @@ from .decorators import admin_required
 @login_required
 @admin_required
 def admin_dashboard(request):
-    # Get stats for dashboard
+    """Admin overview with order stats, revenue, and popular products."""
     total_orders = Order.objects.count()
     pending_orders = Order.objects.filter(status='pending').count()
     completed_orders = Order.objects.filter(status='delivered').count()
@@ -46,6 +46,7 @@ def admin_dashboard(request):
 @login_required
 @admin_required
 def category_list(request):
+    """Paginated list of all categories."""
     categories_qs = Category.objects.all().order_by('-created_at')
     paginator = Paginator(categories_qs, 20)
     page_obj = paginator.get_page(request.GET.get('page'))
@@ -59,6 +60,7 @@ def category_list(request):
 @login_required
 @admin_required
 def category_add(request):
+    """Create a new category."""
     if request.method == 'POST':
         form = CategoryForm(request.POST, request.FILES)
         if form.is_valid():
@@ -79,6 +81,7 @@ def category_add(request):
 @login_required
 @admin_required
 def category_edit(request, category_id):
+    """Edit an existing category."""
     category = get_object_or_404(Category, id=category_id)
     
     if request.method == 'POST':
@@ -102,6 +105,7 @@ def category_edit(request, category_id):
 @login_required
 @admin_required
 def subcategory_list(request):
+    """Paginated list of all subcategories."""
     subcategories_qs = SubCategory.objects.all().order_by('-created_at')
     paginator = Paginator(subcategories_qs, 20)
     page_obj = paginator.get_page(request.GET.get('page'))
@@ -115,6 +119,7 @@ def subcategory_list(request):
 @login_required
 @admin_required
 def subcategory_add(request):
+    """Create a new subcategory."""
     if request.method == 'POST':
         form = SubCategoryForm(request.POST, request.FILES)
         if form.is_valid():
@@ -135,6 +140,7 @@ def subcategory_add(request):
 @login_required
 @admin_required
 def subcategory_edit(request, subcategory_id):
+    """Edit an existing subcategory."""
     subcategory = get_object_or_404(SubCategory, id=subcategory_id)
     
     if request.method == 'POST':
@@ -158,6 +164,7 @@ def subcategory_edit(request, subcategory_id):
 @login_required
 @admin_required
 def product_list(request):
+    """Paginated list of all products with category info."""
     products_qs = Product.objects.select_related('subcategory__category').all().order_by('-created_at')
     paginator = Paginator(products_qs, 20)
     page_obj = paginator.get_page(request.GET.get('page'))
@@ -171,6 +178,7 @@ def product_list(request):
 @login_required
 @admin_required
 def product_add(request):
+    """Create a new product with optional gallery images."""
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         formset = ProductImageFormSet(request.POST, request.FILES, prefix='images')
@@ -202,6 +210,7 @@ def product_add(request):
 @login_required
 @admin_required
 def product_edit(request, product_id):
+    """Edit an existing product and its gallery images."""
     product = get_object_or_404(Product, id=product_id)
     
     if request.method == 'POST':
@@ -233,6 +242,7 @@ def product_edit(request, product_id):
 @login_required
 @admin_required
 def order_list(request):
+    """Paginated list of all orders, newest first."""
     orders_qs = Order.objects.select_related('user').all().order_by('-created_at')
     paginator = Paginator(orders_qs, 20)
     page_obj = paginator.get_page(request.GET.get('page'))
@@ -246,6 +256,7 @@ def order_list(request):
 @login_required
 @admin_required
 def order_detail(request, tracking_number):
+    """View order details and items for a specific order."""
     order = get_object_or_404(Order, tracking_number=tracking_number)
     order_items = order.items.all()
     
@@ -259,6 +270,7 @@ def order_detail(request, tracking_number):
 @admin_required
 @require_POST
 def update_order_status(request, tracking_number):
+    """Update an order's fulfillment status."""
     order = get_object_or_404(Order, tracking_number=tracking_number)
 
     status = request.POST.get('status')
@@ -277,6 +289,7 @@ def update_order_status(request, tracking_number):
 @login_required
 @admin_required
 def carousel_list(request):
+    """Paginated list of carousel images."""
     carousel_qs = CarouselImage.objects.all().order_by('order', '-created_at')
     paginator = Paginator(carousel_qs, 20)
     page_obj = paginator.get_page(request.GET.get('page'))
@@ -290,6 +303,7 @@ def carousel_list(request):
 @login_required
 @admin_required
 def carousel_add(request):
+    """Add a new carousel image."""
     if request.method == 'POST':
         form = CarouselImageForm(request.POST, request.FILES)
         if form.is_valid():
@@ -308,6 +322,7 @@ def carousel_add(request):
 @login_required
 @admin_required
 def carousel_edit(request, image_id):
+    """Edit an existing carousel image."""
     carousel_image = get_object_or_404(CarouselImage, id=image_id)
     
     if request.method == 'POST':
@@ -330,6 +345,7 @@ def carousel_edit(request, image_id):
 @admin_required
 @require_POST
 def carousel_toggle_active(request, image_id):
+    """Toggle a carousel image between active and inactive."""
     carousel_image = get_object_or_404(CarouselImage, id=image_id)
     carousel_image.is_active = not carousel_image.is_active
     carousel_image.save()
@@ -342,6 +358,7 @@ def carousel_toggle_active(request, image_id):
 @login_required
 @admin_required
 def carousel_delete(request, image_id):
+    """Delete a carousel image (confirmation on GET, delete on POST)."""
     carousel_image = get_object_or_404(CarouselImage, id=image_id)
     
     if request.method == 'POST':

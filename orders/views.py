@@ -12,6 +12,7 @@ from payment.models import Payment
 
 @login_required
 def cart_detail(request):
+    """Display the user's shopping cart contents."""
     try:
         cart = Cart.objects.get(user=request.user)
         cart_items = cart.items.all()
@@ -28,6 +29,7 @@ def cart_detail(request):
 @login_required
 @require_POST
 def cart_add(request, product_id):
+    """Add a product to cart or update its quantity. Supports AJAX and HTMX."""
     product = get_object_or_404(Product, id=product_id)
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
@@ -100,6 +102,7 @@ def _render_cart_partial(request):
 @login_required
 @require_POST
 def cart_remove(request, product_id):
+    """Remove a product from the cart. Supports AJAX and HTMX."""
     product = get_object_or_404(Product, id=product_id)
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
@@ -122,6 +125,7 @@ def cart_remove(request, product_id):
 @login_required
 @require_POST
 def cart_update(request, product_id):
+    """Update cart item quantity. Removes item if quantity <= 0. Supports AJAX and HTMX."""
     product = get_object_or_404(Product, id=product_id)
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
     final_qty = 0
@@ -160,6 +164,7 @@ def cart_update(request, product_id):
 
 @login_required
 def checkout(request):
+    """Validate cart, collect shipping info, create order, and redirect to payment."""
     try:
         cart = Cart.objects.get(user=request.user)
         cart_items = cart.items.all()
@@ -236,6 +241,7 @@ def checkout(request):
 
 @login_required
 def order_complete(request, tracking_number):
+    """Show order confirmation with payment details."""
     order = get_object_or_404(Order, tracking_number=tracking_number, user=request.user)
     
     try:
@@ -252,6 +258,7 @@ def order_complete(request, tracking_number):
 
 @login_required
 def track_order(request):
+    """Search form for order tracking with recent orders list."""
     if request.method == 'POST':
         tracking_number = request.POST.get('tracking_number', '')
         return redirect('orders:track_order_detail', tracking_number=tracking_number)
@@ -265,6 +272,7 @@ def track_order(request):
 
 @login_required
 def track_order_detail(request, tracking_number):
+    """Display order status and items for a specific tracking number."""
     order = get_object_or_404(Order, tracking_number=tracking_number, user=request.user)
 
     context = {

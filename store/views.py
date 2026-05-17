@@ -9,6 +9,7 @@ from .forms import ReviewForm
 
 
 def home(request):
+    """Homepage with featured products and carousel."""
     categories = Category.objects.filter(is_active=True)
     featured_products = Product.objects.filter(is_available=True).order_by('-created_at')[:8]
     carousel_images = CarouselImage.objects.filter(is_active=True).order_by('order', '-created_at')
@@ -21,6 +22,7 @@ def home(request):
     return render(request, 'store/home.html', context)
 
 def category_detail(request, category_slug):
+    """List all products within a category, paginated."""
     category = get_object_or_404(Category, slug=category_slug, is_active=True)
     subcategories = category.subcategories.filter(is_active=True)
 
@@ -40,6 +42,7 @@ def category_detail(request, category_slug):
     return render(request, 'store/category_detail.html', context)
 
 def subcategory_detail(request, category_slug, subcategory_slug):
+    """List all products within a subcategory, paginated."""
     category = get_object_or_404(Category, slug=category_slug, is_active=True)
     subcategory = get_object_or_404(SubCategory, slug=subcategory_slug, category=category, is_active=True)
 
@@ -59,6 +62,7 @@ def subcategory_detail(request, category_slug, subcategory_slug):
     return render(request, 'store/subcategory_detail.html', context)
 
 def product_detail(request, product_slug):
+    """Product page with images, reviews, rating, and add-to-cart/wishlist."""
     product = get_object_or_404(Product, slug=product_slug, is_available=True)
     related_products = Product.objects.filter(subcategory=product.subcategory).exclude(id=product.id)[:4]
     
@@ -104,6 +108,7 @@ def product_detail(request, product_slug):
     return render(request, 'store/product_detail.html', context)
 
 def search(request):
+    """Search products by name, description, subcategory, or category."""
     query = request.GET.get('q', '')
     page_obj = None
 
@@ -127,6 +132,7 @@ def search(request):
 
 @login_required
 def wishlist(request):
+    """Display the user's saved wishlist products."""
     wishlist_obj, created = Wishlist.objects.get_or_create(user=request.user)
     products = wishlist_obj.products.all().order_by('-id')
 
@@ -139,6 +145,7 @@ def wishlist(request):
 @login_required
 @require_POST
 def add_to_wishlist(request, product_id):
+    """Add a product to the user's wishlist."""
     product = get_object_or_404(Product, id=product_id)
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
 
@@ -151,6 +158,7 @@ def add_to_wishlist(request, product_id):
 @login_required
 @require_POST
 def remove_from_wishlist(request, product_id):
+    """Remove a product from the user's wishlist."""
     product = get_object_or_404(Product, id=product_id)
     wishlist = Wishlist.objects.filter(user=request.user).first()
 

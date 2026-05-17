@@ -1,15 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.urls import reverse
 from orders.models import Order
 from .models import Payment
-import uuid
 import random
 import string
 
 @login_required
 def payment_process(request, tracking_number):
+    """Initiate payment — auto-processes COD, shows payment form for other methods."""
     order = get_object_or_404(Order, tracking_number=tracking_number, user=request.user)
     
     # If order is already paid, redirect to order detail
@@ -43,6 +42,7 @@ def payment_process(request, tracking_number):
 
 @login_required
 def payment_complete(request, tracking_number):
+    """Complete payment processing and show confirmation (simulated gateway)."""
     order = get_object_or_404(Order, tracking_number=tracking_number, user=request.user)
     
     # For online payment methods (when payment form submitted)
@@ -88,6 +88,7 @@ def payment_complete(request, tracking_number):
 
 @login_required
 def payment_canceled(request, tracking_number):
+    """Handle payment cancellation."""
     order = get_object_or_404(Order, tracking_number=tracking_number, user=request.user)
     
     messages.warning(request, "Your payment was canceled.")

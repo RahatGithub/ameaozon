@@ -2,6 +2,8 @@ from django.db import models
 from orders.models import Order
 
 class Payment(models.Model):
+    """Record of a payment transaction linked to an order."""
+
     PAYMENT_STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('completed', 'Completed'),

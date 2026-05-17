@@ -4,6 +4,8 @@ from store.models import Product
 import uuid
 
 class Cart(models.Model):
+    """Persistent shopping cart (one per user)."""
+
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -18,6 +20,8 @@ class Cart(models.Model):
         return sum(item.quantity for item in self.items.all())
 
 class CartItem(models.Model):
+    """A product line-item within a cart with quantity."""
+
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
@@ -32,6 +36,8 @@ class CartItem(models.Model):
         return self.product.price * self.quantity
 
 class Order(models.Model):
+    """A placed order with shipping info, status tracking, and payment state."""
+
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('processing', 'Processing'),
@@ -73,6 +79,8 @@ class Order(models.Model):
         super().save(*args, **kwargs)
 
 class OrderItem(models.Model):
+    """Snapshot of a product at purchase time (price frozen at order creation)."""
+
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)

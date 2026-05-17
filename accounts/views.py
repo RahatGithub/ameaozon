@@ -10,12 +10,14 @@ from store.models import Wishlist
 
 @require_POST
 def logout_view(request):
+    """Log out the current user and redirect to home."""
     logout(request)
     messages.success(request, "You have been successfully logged out.")
     return redirect('store:home')
 
 
 def register(request):
+    """Handle new user registration with username and email."""
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -29,6 +31,7 @@ def register(request):
 
 @login_required
 def profile(request):
+    """Display and update user profile information."""
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
@@ -41,6 +44,7 @@ def profile(request):
 
 @login_required
 def customer_dashboard(request):
+    """Show customer's orders and wishlist; redirect admins to admin dashboard."""
     if request.user.user_type == User.ADMIN:
         return redirect('dashboard:admin_dashboard')
 

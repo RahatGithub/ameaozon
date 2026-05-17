@@ -4,7 +4,9 @@ from django.utils.text import slugify
 from django.conf import settings
 from django.utils import timezone
 
+
 class Category(models.Model):
+    """Top-level product grouping (e.g. Cats, Dogs, Birds)."""
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     image = models.ImageField(upload_to='categories/', blank=True, null=True)
@@ -24,6 +26,8 @@ class Category(models.Model):
         super().save(*args, **kwargs)
 
 class SubCategory(models.Model):
+    """Second-level grouping within a category (e.g. Cat Food, Cat Toys)."""
+
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subcategories')
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
@@ -45,6 +49,8 @@ class SubCategory(models.Model):
         super().save(*args, **kwargs)
 
 class Product(models.Model):
+    """A purchasable item belonging to a subcategory."""
+
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='products')
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
@@ -69,6 +75,8 @@ class Product(models.Model):
         return result or 0
 
 class ProductImage(models.Model):
+    """Additional gallery image for a product."""
+
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='products/')
     
@@ -76,6 +84,8 @@ class ProductImage(models.Model):
         return f"Image for {self.product.name}"
 
 class CarouselImage(models.Model):
+    """Homepage hero carousel slide."""
+
     image = models.ImageField(upload_to='carousel/')
     title = models.CharField(max_length=200, blank=True)
     subtitle = models.CharField(max_length=300, blank=True)
@@ -92,6 +102,8 @@ class CarouselImage(models.Model):
     
 
 class Review(models.Model):
+    """User rating and optional comment on a product (one per user per product)."""
+
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(choices=[(i, i) for i in range(1, 6)])
@@ -105,6 +117,8 @@ class Review(models.Model):
         return f"{self.user.username}'s review on {self.product.name}"
 
 class Wishlist(models.Model):
+    """Collection of saved products for a user (one wishlist per user)."""
+
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product)
     created_at = models.DateTimeField(auto_now_add=True)
