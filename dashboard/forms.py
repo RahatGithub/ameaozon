@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from store.models import Category, SubCategory, Product, ProductImage
+from store.models import Category, SubCategory, Product, ProductImage, CarouselImage
 
 class CategoryForm(forms.ModelForm):
     class Meta:
@@ -56,9 +56,22 @@ class ProductImageForm(forms.ModelForm):
         }
 
 ProductImageFormSet = inlineformset_factory(
-    Product, 
-    ProductImage, 
-    form=ProductImageForm, 
-    extra=3, 
+    Product,
+    ProductImage,
+    form=ProductImageForm,
+    extra=3,
     can_delete=True
 )
+
+
+class CarouselImageForm(forms.ModelForm):
+    class Meta:
+        model = CarouselImage
+        fields = ['image', 'title', 'subtitle', 'link', 'order', 'is_active']
+        widgets = {
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'subtitle': forms.TextInput(attrs={'class': 'form-control'}),
+            'link': forms.URLInput(attrs={'class': 'form-control'}),
+            'order': forms.NumberInput(attrs={'class': 'form-control'}),
+        }

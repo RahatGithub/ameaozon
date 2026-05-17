@@ -7,8 +7,7 @@ from django.views.decorators.http import require_POST
 from accounts.models import User
 from store.models import Category, SubCategory, Product, ProductImage, Review, CarouselImage
 from orders.models import Order, OrderItem
-from .forms import CategoryForm, SubCategoryForm, ProductForm, ProductImageFormSet
-from store.forms import CarouselImageForm 
+from .forms import CategoryForm, SubCategoryForm, ProductForm, ProductImageFormSet, CarouselImageForm
 from .decorators import admin_required
 
 
@@ -113,14 +112,14 @@ def subcategory_add(request):
             subcategory = form.save(commit=False)
             subcategory.slug = slugify(subcategory.name)
             subcategory.save()
-            messages.success(request, f'SubCategory "{subcategory.name}" added successfully.')
+            messages.success(request, f'Subcategory "{subcategory.name}" added successfully.')
             return redirect('dashboard:subcategory_list')
     else:
         form = SubCategoryForm()
-    
+
     context = {
         'form': form,
-        'title': 'Add SubCategory'
+        'title': 'Add Subcategory'
     }
     return render(request, 'dashboard/subcategory_form.html', context)
 
@@ -135,14 +134,14 @@ def subcategory_edit(request, subcategory_id):
             subcategory = form.save(commit=False)
             subcategory.slug = slugify(subcategory.name)
             subcategory.save()
-            messages.success(request, f'SubCategory "{subcategory.name}" updated successfully.')
+            messages.success(request, f'Subcategory "{subcategory.name}" updated successfully.')
             return redirect('dashboard:subcategory_list')
     else:
         form = SubCategoryForm(instance=subcategory)
-    
+
     context = {
         'form': form,
-        'title': 'Edit SubCategory',
+        'title': 'Edit Subcategory',
         'subcategory': subcategory
     }
     return render(request, 'dashboard/subcategory_form.html', context)

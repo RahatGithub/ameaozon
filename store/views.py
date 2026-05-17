@@ -4,7 +4,7 @@ from django.views.decorators.http import require_POST
 from django.db.models import Q, Avg
 from django.contrib import messages
 from .models import Category, SubCategory, Product, Review, Wishlist, CarouselImage
-from .forms import ReviewForm, CarouselImageForm
+from .forms import ReviewForm
 
 
 def home(request):
