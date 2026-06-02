@@ -1,7 +1,7 @@
 import multiprocessing
 
-# Bind to localhost — nginx will reverse-proxy to this
-bind = "127.0.0.1:8000"
+# Bind to all interfaces — nginx container reverse-proxies to this
+bind = "0.0.0.0:8000"
 
 # CPX22: 4 vCPU — (2 * cores) + 1
 workers = multiprocessing.cpu_count() * 2 + 1

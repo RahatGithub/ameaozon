@@ -3,8 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from orders.models import Order
 from .models import Payment
-import random
-import string
+import secrets
 
 @login_required
 def payment_process(request, tracking_number):
@@ -52,7 +51,7 @@ def payment_complete(request, tracking_number):
         
         if payment_successful:
             # Generate a random payment ID
-            payment_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+            payment_id = secrets.token_hex(6).upper()
             
             # Create payment record
             payment = Payment.objects.create(
