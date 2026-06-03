@@ -31,7 +31,7 @@
                   hx-vals='{"quantity": "{{ item.quantity|add:-1 }}"}'
                   hx-target="#cart-body"
                   hx-swap="outerHTML"
-                  class="w-8 h-8 rounded-full bg-white shadow-sm text-ink-700 hover:bg-brand-500 hover:text-white transition disabled:opacity-40"
+                  class="w-8 h-8 rounded-full bg-white shadow-sm text-ink-700 hover:!bg-brand-500 hover:text-white transition disabled:opacity-40"
                   {% if item.quantity <= 1 %}disabled{% endif %}>
             <i class="fas fa-minus text-xs"></i>
           </button>
@@ -41,7 +41,7 @@
                   hx-vals='{"quantity": "{{ item.quantity|add:1 }}"}'
                   hx-target="#cart-body"
                   hx-swap="outerHTML"
-                  class="w-8 h-8 rounded-full bg-white shadow-sm text-ink-700 hover:bg-brand-500 hover:text-white transition disabled:opacity-40"
+                  class="w-8 h-8 rounded-full bg-white shadow-sm text-ink-700 hover:!bg-brand-500 hover:text-white transition disabled:opacity-40"
                   {% if item.quantity >= item.product.stock %}disabled{% endif %}>
             <i class="fas fa-plus text-xs"></i>
           </button>
