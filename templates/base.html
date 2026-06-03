@@ -175,7 +175,11 @@
             {% if user.is_authenticated %}
               <div class="relative" @click.away="userOpen=false">
                 <button @click="userOpen=!userOpen" class="ml-1 inline-flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full bg-ink-100 hover:bg-ink-200 transition">
-                  <span class="w-7 h-7 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-white text-xs font-bold inline-flex items-center justify-center">{{ user.username|slice:":1"|upper }}</span>
+                  {% if user.profile_picture %}
+                    <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}" class="w-7 h-7 rounded-full object-cover">
+                  {% else %}
+                    <span class="w-7 h-7 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-white text-xs font-bold inline-flex items-center justify-center">{{ user.username|slice:":1"|upper }}</span>
+                  {% endif %}
                   <span class="text-sm font-medium text-ink-700 hidden sm:inline">{{ user.username }}</span>
                 </button>
                 <div x-show="userOpen" x-transition x-cloak class="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-card border border-ink-100 py-2" style="display:none">
