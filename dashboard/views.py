@@ -69,9 +69,11 @@ def category_add(request):
             category.save()
             messages.success(request, f'Category "{category.name}" added successfully.')
             return redirect('dashboard:category_list')
+        else:
+            messages.error(request, 'Could not add category. Please fix the errors below.')
     else:
         form = CategoryForm()
-    
+
     context = {
         'form': form,
         'title': 'Add Category'
@@ -92,6 +94,8 @@ def category_edit(request, category_id):
             category.save()
             messages.success(request, f'Category "{category.name}" updated successfully.')
             return redirect('dashboard:category_list')
+        else:
+            messages.error(request, 'Could not update category. Please fix the errors below.')
     else:
         form = CategoryForm(instance=category)
     
@@ -128,6 +132,8 @@ def subcategory_add(request):
             subcategory.save()
             messages.success(request, f'Subcategory "{subcategory.name}" added successfully.')
             return redirect('dashboard:subcategory_list')
+        else:
+            messages.error(request, 'Could not add subcategory. Please fix the errors below.')
     else:
         form = SubCategoryForm()
 
@@ -151,6 +157,8 @@ def subcategory_edit(request, subcategory_id):
             subcategory.save()
             messages.success(request, f'Subcategory "{subcategory.name}" updated successfully.')
             return redirect('dashboard:subcategory_list')
+        else:
+            messages.error(request, 'Could not update subcategory. Please fix the errors below.')
     else:
         form = SubCategoryForm(instance=subcategory)
 
@@ -196,6 +204,8 @@ def product_add(request):
             
             messages.success(request, f'Product "{product.name}" added successfully.')
             return redirect('dashboard:product_list')
+        else:
+            messages.error(request, 'Could not add product. Please fix the errors below.')
     else:
         form = ProductForm()
         formset = ProductImageFormSet(prefix='images')
@@ -227,6 +237,8 @@ def product_edit(request, product_id):
             
             messages.success(request, f'Product "{product.name}" updated successfully.')
             return redirect('dashboard:product_list')
+        else:
+            messages.error(request, 'Could not update product. Please fix the errors below.')
     else:
         form = ProductForm(instance=product)
         formset = ProductImageFormSet(prefix='images', instance=product)
@@ -310,6 +322,8 @@ def carousel_add(request):
             form.save()
             messages.success(request, 'Carousel image added successfully.')
             return redirect('dashboard:carousel_list')
+        else:
+            messages.error(request, 'Could not add carousel image. Please fix the errors below.')
     else:
         form = CarouselImageForm()
     
@@ -331,6 +345,8 @@ def carousel_edit(request, image_id):
             form.save()
             messages.success(request, 'Carousel image updated successfully.')
             return redirect('dashboard:carousel_list')
+        else:
+            messages.error(request, 'Could not update carousel image. Please fix the errors below.')
     else:
         form = CarouselImageForm(instance=carousel_image)
     

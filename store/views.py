@@ -87,6 +87,8 @@ def product_detail(request, product_slug):
             else:
                 messages.success(request, 'Your review has been updated!')
             return redirect('store:product_detail', product_slug=product.slug)
+        else:
+            messages.error(request, 'Please select a rating before submitting your review.')
     else:
         form = ReviewForm()
     
@@ -149,7 +151,9 @@ def add_to_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
 
-    if product not in wishlist.products.all():
+    if product in wishlist.products.all():
+        messages.info(request, f'{product.name} is already in your wishlist.')
+    else:
         wishlist.products.add(product)
         messages.success(request, f'{product.name} added to your wishlist.')
 
@@ -165,6 +169,8 @@ def remove_from_wishlist(request, product_id):
     if wishlist and product in wishlist.products.all():
         wishlist.products.remove(product)
         messages.success(request, f'{product.name} removed from your wishlist.')
+    else:
+        messages.warning(request, f'{product.name} was not in your wishlist.')
 
     next_url = request.POST.get('next', 'store:wishlist')
     return redirect(next_url)

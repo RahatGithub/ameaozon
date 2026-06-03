@@ -187,6 +187,7 @@ def checkout(request):
 
             if form.is_valid():
                 with transaction.atomic():
+
                     order = form.save(commit=False)
                     order.user = request.user
                     order.total_price = total_price
@@ -211,6 +212,8 @@ def checkout(request):
 
                 # Redirect to payment page
                 return redirect('payment:payment_process', tracking_number=order.tracking_number)
+            else:
+                messages.error(request, 'Please fix the errors in your shipping details before placing the order.')
         else:
             # Pre-fill form with user data
             initial_data = {}
