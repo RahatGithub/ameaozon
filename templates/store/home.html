@@ -51,20 +51,28 @@
       <div data-aos="fade-left" class="relative">
         <div class="swiper hero-swiper rounded-3xl overflow-hidden shadow-card ring-1 ring-ink-100">
           <div class="swiper-wrapper">
-            <!-- Static promotional banners -->
+            {% for slide in carousel_images %}
             <div class="swiper-slide relative">
-              <img src="{% static 'images/carousel/carousel1.png' %}" alt="Everything your pet needs, all in one place" class="w-full h-[420px] object-cover">
+              <img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Ameaozon' }}" class="w-full h-[420px] object-cover">
+              {% if slide.title or slide.subtitle %}
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              <div class="absolute inset-x-0 bottom-0 p-6 text-white">
+                {% if slide.title %}<h3 class="font-display text-2xl font-bold">{{ slide.title }}</h3>{% endif %}
+                {% if slide.subtitle %}<p class="mt-1 text-white/85 text-sm">{{ slide.subtitle }}</p>{% endif %}
+              </div>
+              {% endif %}
             </div>
+            {% empty %}
             <div class="swiper-slide relative">
-              <img src="{% static 'images/carousel/carousel2.png' %}" alt="Play, Love, Care — Everything they need" class="w-full h-[420px] object-cover">
+              <img src="{% static 'images/carousel-placeholder.svg' %}" alt="Welcome to Ameaozon" class="w-full h-[420px] object-cover">
             </div>
-            <div class="swiper-slide relative">
-              <img src="{% static 'images/carousel/carousel3.png' %}" alt="Easy Payment, Your Way" class="w-full h-[420px] object-cover">
-            </div>
+            {% endfor %}
           </div>
+          {% if carousel_images|length > 1 %}
           <div class="swiper-pagination !bottom-3"></div>
           <div class="swiper-button-prev !text-white !w-10 !h-10 after:!text-base"></div>
           <div class="swiper-button-next !text-white !w-10 !h-10 after:!text-base"></div>
+          {% endif %}
         </div>
       </div>
     </div>
