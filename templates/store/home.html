@@ -103,24 +103,36 @@
     <a href="#featured" class="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:text-brand-700">View all <i class="fas fa-arrow-right text-xs"></i></a>
   </div>
 
-  <div class="grid grid-cols-2 md:grid-cols-3 gap-5">
-    {% for category in categories %}
-    <a href="{% url 'store:category_detail' category.slug %}" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:'50' }}"
-       class="group relative aspect-[4/3] overflow-hidden rounded-2xl shadow-card ring-1 ring-ink-100">
-      {% if category.image %}
-        <img src="{{ category.image.url }}" alt="{{ category.name }}" class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-110">
-      {% else %}
-        <div class="absolute inset-0 bg-gradient-to-br from-brand-300 to-brand-500"></div>
-      {% endif %}
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-      <div class="absolute inset-x-0 bottom-0 p-5">
-        <h3 class="font-display text-xl font-bold text-white">{{ category.name }}</h3>
-        <div class="mt-1 inline-flex items-center gap-1.5 text-xs font-medium text-white/90 opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition">
-          Shop now <i class="fas fa-arrow-right text-[10px]"></i>
+  <div class="relative">
+    <div class="swiper category-swiper">
+      <div class="swiper-wrapper">
+        {% for category in categories %}
+        <div class="swiper-slide">
+          <a href="{% url 'store:category_detail' category.slug %}" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:'50' }}"
+             class="group relative aspect-[4/3] overflow-hidden rounded-2xl shadow-card ring-1 ring-ink-100 block">
+            {% if category.image %}
+              <img src="{{ category.image.url }}" alt="{{ category.name }}" class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-110">
+            {% else %}
+              <div class="absolute inset-0 bg-gradient-to-br from-brand-300 to-brand-500"></div>
+            {% endif %}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+            <div class="absolute inset-x-0 bottom-0 p-5">
+              <h3 class="font-display text-xl font-bold text-white">{{ category.name }}</h3>
+              <div class="mt-1 inline-flex items-center gap-1.5 text-xs font-medium text-white/90 opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition">
+                Shop now <i class="fas fa-arrow-right text-[10px]"></i>
+              </div>
+            </div>
+          </a>
         </div>
+        {% endfor %}
       </div>
-    </a>
-    {% endfor %}
+    </div>
+    <button class="cat-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-card ring-1 ring-ink-100 text-ink-700 hover:!bg-brand-500 hover:text-white transition hidden items-center justify-center">
+      <i class="fas fa-chevron-left text-sm"></i>
+    </button>
+    <button class="cat-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-card ring-1 ring-ink-100 text-ink-700 hover:!bg-brand-500 hover:text-white transition hidden items-center justify-center">
+      <i class="fas fa-chevron-right text-sm"></i>
+    </button>
   </div>
 </section>
 
@@ -214,6 +226,28 @@
       fadeEffect: { crossFade: true },
       pagination: { el: '.hero-swiper .swiper-pagination', clickable: true },
       navigation: { nextEl: '.hero-swiper .swiper-button-next', prevEl: '.hero-swiper .swiper-button-prev' },
+    });
+
+    const catSlides = document.querySelectorAll('.category-swiper .swiper-slide');
+    const prevBtn = document.querySelector('.cat-prev');
+    const nextBtn = document.querySelector('.cat-next');
+    const needsSlider = catSlides.length > 3;
+
+    if (needsSlider && prevBtn && nextBtn) {
+      prevBtn.classList.replace('hidden', 'flex');
+      nextBtn.classList.replace('hidden', 'flex');
+    }
+
+    new Swiper('.category-swiper', {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      loop: needsSlider,
+      autoplay: needsSlider ? { delay: 3500, disableOnInteraction: false } : false,
+      navigation: needsSlider ? { nextEl: '.cat-next', prevEl: '.cat-prev' } : false,
+      breakpoints: {
+        640:  { slidesPerView: 2 },
+        1024: { slidesPerView: 3 },
+      },
     });
   });
 </script>
