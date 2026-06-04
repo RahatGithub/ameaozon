@@ -381,7 +381,7 @@
         el.className = 'pointer-events-auto flex items-center gap-3 px-4 py-3.5 rounded-xl shadow-lg border backdrop-blur-sm animate-slide-in ' + c.bg + ' ' + c.border + ' ' + c.text;
         el.innerHTML = '<i class="fas ' + c.icon + '"></i><div class="text-sm font-medium">' + message + '</div>';
         container.appendChild(el);
-        setTimeout(function() { el.style.transition = 'opacity 0.2s'; el.style.opacity = '0'; setTimeout(function() { el.remove(); }, 200); }, 4000);
+        setTimeout(function() { el.style.transition = 'opacity 0.3s ease-in, transform 0.3s ease-in'; el.style.opacity = '0'; el.style.transform = 'translateY(-0.5rem)'; setTimeout(function() { el.remove(); }, 300); }, 4000);
       }
       function _updateWishlistBadge() {
         const badge = document.getElementById('wishlist-badge');
