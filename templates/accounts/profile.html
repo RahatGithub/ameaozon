@@ -25,12 +25,11 @@
 
         <!-- Avatar section -->
         <div class="flex flex-col sm:flex-row gap-6 items-start mb-8 pb-8 border-b border-ink-100">
-          <div class="shrink-0 text-center" x-data="{ preview: null }">
+          <div class="shrink-0 text-center">
             {% if user.profile_picture %}
-            <img :src="preview || '{{ user.profile_picture.url }}'" alt="{{ user.username }}" class="w-28 h-28 rounded-full object-cover ring-4 ring-brand-100 mx-auto">
+            <img id="avatar-preview" src="{{ user.profile_picture.url }}" alt="{{ user.username }}" class="w-28 h-28 rounded-full object-cover ring-4 ring-brand-100 mx-auto">
             {% else %}
-            <img x-show="preview" :src="preview" alt="Preview" class="w-28 h-28 rounded-full object-cover ring-4 ring-brand-100 mx-auto" style="display:none">
-            <div x-show="!preview" class="w-28 h-28 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-white inline-flex items-center justify-center mx-auto">
+            <div class="w-28 h-28 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-white inline-flex items-center justify-center mx-auto">
               <i class="fas fa-user text-4xl"></i>
             </div>
             {% endif %}
@@ -39,6 +38,7 @@
                 <i class="fas fa-camera"></i> Change photo
               </label>
               <div class="hidden">{{ form.profile_picture }}</div>
+              <p id="photo-filename" class="mt-1.5 text-xs text-brand-600 font-medium hidden"><i class="fas fa-check-circle mr-1"></i><span></span></p>
               {% if form.profile_picture.errors %}
               <p class="mt-1 text-xs text-rose-600">{{ form.profile_picture.errors.0 }}</p>
               {% endif %}
@@ -145,14 +145,9 @@ document.addEventListener('DOMContentLoaded', function() {
   input.addEventListener('change', function() {
     const file = this.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const wrapper = input.closest('[x-data]');
-      if (wrapper && wrapper.__x) {
-        wrapper.__x.$data.preview = e.target.result;
-      }
-    };
-    reader.readAsDataURL(file);
+    const label = document.getElementById('photo-filename');
+    label.querySelector('span').textContent = file.name;
+    label.classList.remove('hidden');
   });
 });
 </script>
