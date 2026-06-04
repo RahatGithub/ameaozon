@@ -3,9 +3,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import JsonResponse
+from accounts.views import admin_login_view
 
 urlpatterns = [
     path('health/', lambda request: JsonResponse({'status': 'ok'})),
+    path('staff/login/', admin_login_view, name='admin_login'),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('', include('store.urls')),
