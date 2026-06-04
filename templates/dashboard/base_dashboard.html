@@ -149,7 +149,7 @@
                   {% else %}bg-blue-50 text-blue-700 border-blue-200{% endif %}">
         <i class="fas {% if message.tags == 'success' %}fa-circle-check text-emerald-500{% elif message.tags == 'error' or message.tags == 'danger' %}fa-circle-xmark text-rose-500{% elif message.tags == 'warning' %}fa-triangle-exclamation text-amber-500{% else %}fa-circle-info text-blue-500{% endif %}"></i>
         <span class="flex-1">{{ message }}</span>
-        <button @click="show=false" class="text-current opacity-40 hover:opacity-70 transition"><i class="fas fa-xmark"></i></button>
+        <button @click="show=false" class="shrink-0 bg-transparent border-none p-0 leading-none cursor-pointer text-current opacity-40 hover:opacity-70 transition"><i class="fas fa-xmark text-sm"></i></button>
       </div>
       {% endfor %}
     </div>

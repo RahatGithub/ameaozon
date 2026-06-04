@@ -244,7 +244,7 @@
                     {% else %}bg-blue-50/95 border-blue-200 text-blue-800{% endif %}">
             <i class="fas {% if 'error' in message.tags %}fa-circle-xmark text-rose-500{% elif 'success' in message.tags %}fa-circle-check text-emerald-500{% elif 'warning' in message.tags %}fa-triangle-exclamation text-amber-500{% else %}fa-circle-info text-blue-500{% endif %} mt-0.5"></i>
             <div class="text-sm font-medium flex-1">{{ message }}</div>
-            <button @click="show=false" class="{% if 'error' in message.tags %}text-rose-400 hover:text-rose-600{% elif 'success' in message.tags %}text-emerald-400 hover:text-emerald-600{% elif 'warning' in message.tags %}text-amber-400 hover:text-amber-600{% else %}text-blue-400 hover:text-blue-600{% endif %} transition"><i class="fas fa-xmark"></i></button>
+            <button @click="show=false" class="shrink-0 bg-transparent border-none p-0 leading-none cursor-pointer {% if 'error' in message.tags %}text-rose-400 hover:text-rose-600{% elif 'success' in message.tags %}text-emerald-400 hover:text-emerald-600{% elif 'warning' in message.tags %}text-amber-400 hover:text-amber-600{% else %}text-blue-400 hover:text-blue-600{% endif %} transition"><i class="fas fa-xmark text-sm"></i></button>
         </div>
         {% endfor %}
     </div>
