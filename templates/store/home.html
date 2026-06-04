@@ -222,7 +222,7 @@
         <h3 class="font-display text-3xl sm:text-4xl font-extrabold">Join the pack 🐾</h3>
         <p class="mt-2 text-white/85 max-w-md">Subscribe for exclusive deals, pet care tips, and early access to new arrivals.</p>
       </div>
-      <form class="flex flex-col sm:flex-row gap-3" onsubmit="event.preventDefault(); this.querySelector('button').innerHTML='<i class=\'fas fa-check\'></i> Subscribed';">
+      <form class="flex flex-col sm:flex-row gap-3" onsubmit="handleSubscribe(event, this)">
         <input type="email" required placeholder="you@example.com" class="flex-1 px-5 py-3 rounded-full text-ink-900 outline-none ring-2 ring-transparent focus:ring-white">
         <button class="px-6 py-3 rounded-full bg-ink-900 hover:bg-black text-white font-semibold transition">Subscribe</button>
       </form>
@@ -330,6 +330,18 @@
 
 {% block scripts %}
 <script>
+  function handleSubscribe(e, form) {
+    e.preventDefault();
+    const input = form.querySelector('input[type="email"]');
+    const btn = form.querySelector('button');
+    const email = input.value;
+    btn.innerHTML = '<i class="fas fa-check"></i> Subscribed';
+    showToast('You have successfully subscribed with ' + email, 'success');
+    setTimeout(function() {
+      input.value = '';
+      btn.innerHTML = 'Subscribe';
+    }, 4000);
+  }
   function demoTogglePw(id, btn) {
     const input = document.getElementById(id);
     const icon = btn.querySelector('i');
