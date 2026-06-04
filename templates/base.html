@@ -240,6 +240,9 @@
       </div>
     </nav>
 
+    <!-- JS Toast container -->
+    <div id="js-toast-container" class="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] flex flex-col gap-2 w-full max-w-sm pointer-events-none"></div>
+
     <!-- Toast Messages -->
     {% if messages %}
     <div class="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] flex flex-col gap-2 w-full max-w-sm pointer-events-none">
@@ -366,6 +369,20 @@
           }
         };
       }
+      function showToast(message, type) {
+        const container = document.getElementById('js-toast-container');
+        if (!container) return;
+        const colors = {
+          success: { bg: 'bg-emerald-50/95', border: 'border-emerald-200', text: 'text-emerald-800', icon: 'fa-circle-check text-emerald-500' },
+          error:   { bg: 'bg-rose-50/95', border: 'border-rose-200', text: 'text-rose-800', icon: 'fa-circle-xmark text-rose-500' },
+        };
+        const c = colors[type] || colors.success;
+        const el = document.createElement('div');
+        el.className = 'pointer-events-auto flex items-center gap-3 px-4 py-3.5 rounded-xl shadow-lg border backdrop-blur-sm animate-slide-in ' + c.bg + ' ' + c.border + ' ' + c.text;
+        el.innerHTML = '<i class="fas ' + c.icon + '"></i><div class="text-sm font-medium">' + message + '</div>';
+        container.appendChild(el);
+        setTimeout(function() { el.style.transition = 'opacity 0.2s'; el.style.opacity = '0'; setTimeout(function() { el.remove(); }, 200); }, 4000);
+      }
       function _updateWishlistBadge() {
         const badge = document.getElementById('wishlist-badge');
         if (!badge) return;
@@ -387,6 +404,7 @@
             this.inWishlist = d.added;
             if (d.added) { window._wishlistSet.add(this.pid); } else { window._wishlistSet.delete(this.pid); }
             _updateWishlistBadge();
+            showToast(d.message, 'success');
           }
         };
       }

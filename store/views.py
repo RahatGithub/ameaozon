@@ -157,12 +157,12 @@ def add_to_wishlist(request, product_id):
     if product in wishlist.products.all():
         wishlist.products.remove(product)
         if is_ajax:
-            return JsonResponse({'added': False})
+            return JsonResponse({'added': False, 'message': f'{product.name} removed from your wishlist.'})
         messages.success(request, f'{product.name} removed from your wishlist.')
     else:
         wishlist.products.add(product)
         if is_ajax:
-            return JsonResponse({'added': True})
+            return JsonResponse({'added': True, 'message': f'{product.name} added to your wishlist.'})
         messages.success(request, f'{product.name} added to your wishlist.')
 
     next_url = request.POST.get('next')
