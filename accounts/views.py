@@ -60,7 +60,7 @@ def admin_login_view(request):
     """Handle admin-only login with separate UI."""
     if request.user.is_authenticated:
         if request.user.is_staff or request.user.is_superuser or request.user.is_admin():
-            return redirect('/admin/')
+            return redirect('dashboard:admin_dashboard')
         return redirect('store:home')
 
     if request.method == 'POST':
@@ -76,7 +76,7 @@ def admin_login_view(request):
             if user.is_staff or user.is_superuser or user.is_admin():
                 login(request, user)
                 messages.success(request, f'Welcome back, {user.username}!')
-                return redirect('/admin/')
+                return redirect('dashboard:admin_dashboard')
             else:
                 messages.error(request, 'You are not an admin. Try using the <a href="/accounts/login/" class="font-semibold text-brand-600 hover:text-brand-700">user login form</a>.')
         else:
