@@ -25,11 +25,12 @@
 
         <!-- Avatar section -->
         <div class="flex flex-col sm:flex-row gap-6 items-start mb-8 pb-8 border-b border-ink-100">
-          <div class="shrink-0 text-center">
+          <div class="shrink-0 text-center" x-data="{ preview: null }">
             {% if user.profile_picture %}
-            <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}" class="w-28 h-28 rounded-full object-cover ring-4 ring-brand-100 mx-auto">
+            <img :src="preview || '{{ user.profile_picture.url }}'" alt="{{ user.username }}" class="w-28 h-28 rounded-full object-cover ring-4 ring-brand-100 mx-auto">
             {% else %}
-            <div class="w-28 h-28 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-white inline-flex items-center justify-center mx-auto">
+            <img x-show="preview" :src="preview" alt="Preview" class="w-28 h-28 rounded-full object-cover ring-4 ring-brand-100 mx-auto" style="display:none">
+            <div x-show="!preview" class="w-28 h-28 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-white inline-flex items-center justify-center mx-auto">
               <i class="fas fa-user text-4xl"></i>
             </div>
             {% endif %}
@@ -136,4 +137,23 @@
     box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
   }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const input = document.getElementById('id_profile_picture');
+  if (!input) return;
+  input.addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const wrapper = input.closest('[x-data]');
+      if (wrapper && wrapper.__x) {
+        wrapper.__x.$data.preview = e.target.result;
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+});
+</script>
 {% endblock %}
