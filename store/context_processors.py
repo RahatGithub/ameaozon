@@ -1,5 +1,5 @@
 from django.core.cache import cache
-from .models import Category
+from .models import Category, Wishlist
 from orders.models import Cart
 
 def categories(request):
@@ -28,3 +28,11 @@ def cart_items_map(request):
         except Cart.DoesNotExist:
             pass
     return {'cart_items_map': cart_map}
+
+def wishlist_ids(request):
+    ids = set()
+    if request.user.is_authenticated:
+        wl = Wishlist.objects.filter(user=request.user).first()
+        if wl:
+            ids = set(wl.products.values_list('id', flat=True))
+    return {'wishlist_ids': ids}

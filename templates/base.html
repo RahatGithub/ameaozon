@@ -115,7 +115,10 @@
 <body x-data="{ mobileOpen: false, userOpen: false, catsOpen: false }" class="font-sans antialiased">
 
     <!-- Cart state for Alpine components -->
-    <script>window._cartMap = { {% for pid, qty in cart_items_map.items %}{{ pid }}:{{ qty }}{% if not forloop.last %},{% endif %}{% endfor %} };</script>
+    <script>
+      window._cartMap = { {% for pid, qty in cart_items_map.items %}{{ pid }}:{{ qty }}{% if not forloop.last %},{% endif %}{% endfor %} };
+      window._wishlistSet = new Set([{% for wid in wishlist_ids %}{{ wid }}{% if not forloop.last %},{% endif %}{% endfor %}]);
+    </script>
 
     <!-- Toast container for HTMX notifications -->
     <div id="cart-toast"></div>
@@ -357,6 +360,22 @@
               const d = await this._post('/orders/update/' + this.pid + '/', { quantity: this.qty - 1 });
               if (d) { this.qty = d.qty; _updateBadge(d.cart_count); }
             }
+          }
+        };
+      }
+      function wishBtn(pid) {
+        return {
+          pid: pid,
+          inWishlist: window._wishlistSet && window._wishlistSet.has(pid),
+          async toggle() {
+            const res = await fetch('/wishlist/add/' + this.pid + '/', {
+              method: 'POST',
+              headers: { 'X-CSRFToken': _getCookie('csrftoken'), 'X-Requested-With': 'XMLHttpRequest' },
+            });
+            if (res.redirected || !res.ok) { window.location.href = res.url || '/accounts/login/'; return; }
+            const d = await res.json();
+            this.inWishlist = d.added;
+            if (d.added) { window._wishlistSet.add(this.pid); } else { window._wishlistSet.delete(this.pid); }
           }
         };
       }

@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 from django.views.decorators.http import require_POST
 from django.db.models import Q, Avg
 from django.contrib import messages
+from django.http import JsonResponse
 from .models import Category, SubCategory, Product, Review, Wishlist, CarouselImage
 from .forms import ReviewForm
 
@@ -147,16 +148,26 @@ def wishlist(request):
 @login_required
 @require_POST
 def add_to_wishlist(request, product_id):
-    """Add a product to the user's wishlist."""
+    """Toggle a product in the user's wishlist."""
     product = get_object_or_404(Product, id=product_id)
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
 
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
     if product in wishlist.products.all():
-        messages.info(request, f'{product.name} is already in your wishlist.')
+        wishlist.products.remove(product)
+        if is_ajax:
+            return JsonResponse({'added': False})
+        messages.success(request, f'{product.name} removed from your wishlist.')
     else:
         wishlist.products.add(product)
+        if is_ajax:
+            return JsonResponse({'added': True})
         messages.success(request, f'{product.name} added to your wishlist.')
 
+    next_url = request.POST.get('next')
+    if next_url:
+        return redirect(next_url)
     return redirect('store:product_detail', product_slug=product.slug)
 
 @login_required
