@@ -240,7 +240,7 @@
 
   <!-- Modal -->
   <div class="fixed inset-0 flex items-center justify-center p-4 pointer-events-none">
-    <div class="relative bg-white rounded-2xl shadow-2xl ring-1 ring-ink-100 w-full max-w-2xl pointer-events-auto overflow-hidden"
+    <div class="relative bg-white rounded-2xl shadow-2xl ring-1 ring-ink-100 w-full max-w-[44rem] pointer-events-auto overflow-hidden"
          x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
          x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
          @click.away="open=false">
@@ -252,7 +252,7 @@
 
       <!-- Header -->
       <div class="px-6 pt-6 pb-4 text-center border-b border-ink-100">
-        <h2 class="font-display text-xl sm:text-2xl font-extrabold text-ink-900">Welcome! This is a demo project.</h2>
+        <h2 class="font-display text-xl sm:text-2xl font-extrabold text-ink-900">Welcome to Ameaozon online shopping!</h2>
         <p class="text-sm text-ink-500 mt-1">Use the credentials below to explore.</p>
       </div>
 
@@ -263,9 +263,9 @@
         <div class="p-5 sm:p-6">
           <div class="flex items-center gap-2 mb-4">
             <span class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 inline-flex items-center justify-center shrink-0">
-              <i class="fas fa-shield-halved text-sm"></i>
+              <i class="fas fa-user-shield text-sm"></i>
             </span>
-            <h3 class="font-display font-bold text-ink-900">Login as Admin</h3>
+            <h3 class="font-display font-bold text-ink-900 whitespace-nowrap">Login as Admin</h3>
           </div>
           <form method="post" action="{% url 'admin_login' %}" class="space-y-3">
             {% csrf_token %}
@@ -296,7 +296,7 @@
             <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 inline-flex items-center justify-center shrink-0">
               <i class="fas fa-user text-sm"></i>
             </span>
-            <h3 class="font-display font-bold text-ink-900">Login as User</h3>
+            <h3 class="font-display font-bold text-ink-900 whitespace-nowrap">Login as User</h3>
           </div>
           <form method="post" action="{% url 'accounts:login' %}" class="space-y-3">
             {% csrf_token %}
@@ -315,7 +315,7 @@
                 </button>
               </div>
             </div>
-            <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-ink-800 hover:bg-ink-900 text-white text-sm font-semibold transition">
+            <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-ink-900 hover:bg-ink-800 text-white text-sm font-semibold transition">
               <i class="fas fa-right-to-bracket text-xs"></i> Login as User
             </button>
           </form>
