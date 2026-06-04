@@ -46,10 +46,10 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}! You can now log in.')
-            return redirect('accounts:login')
+            user = form.save()
+            login(request, user)
+            messages.success(request, f'Welcome to Ameaozon, {user.username}!')
+            return redirect('store:home')
         else:
             messages.error(request, 'Please fix the errors below to create your account.')
     else:
