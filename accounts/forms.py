@@ -16,7 +16,12 @@ class UserRegisterForm(UserCreationForm):
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
-    
+
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'profile_picture', 'phone_number', 'address']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].disabled = True
+        self.fields['email'].disabled = True
