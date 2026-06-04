@@ -332,6 +332,10 @@
 <script>
   function handleSubscribe(e, form) {
     e.preventDefault();
+    {% if not user.is_authenticated %}
+      showToast('Please <a href="{% url "accounts:login" %}" class="font-semibold text-rose-700 underline">login</a> first to subscribe.', 'error');
+      return;
+    {% endif %}
     const input = form.querySelector('input[type="email"]');
     const btn = form.querySelector('button');
     const email = input.value;
