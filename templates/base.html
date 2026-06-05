@@ -218,8 +218,10 @@
             {% endif %}
 
             <!-- Mobile toggle -->
-            <button @click="mobileOpen=!mobileOpen" class="lg:hidden p-2 text-ink-700">
-              <i class="fas fa-bars text-lg"></i>
+            <button @click="mobileOpen=!mobileOpen" class="lg:hidden p-2 text-ink-700 hover:text-brand-600 transition" aria-label="Toggle menu">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" :d="mobileOpen ? 'M6 18L18 6M6 6l12 12' : 'M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'" />
+              </svg>
             </button>
           </div>
         </div>
@@ -282,17 +284,17 @@
           <div class="flex items-center gap-2 mb-3">
             <img src="{% static 'images/ameaozon-logo.png' %}" alt="Ameaozon" class="h-9 w-auto brightness-0 invert">
           </div>
-          <p class="text-ink-200/70 text-sm max-w-md">Everything your pet needs, delivered with care. From premium food to playful toys — we've got tails wagging across Bangladesh.</p>
+          <p class="text-ink-200/70 text-sm sm:text-base max-w-md">Everything your pet needs, delivered with care. From premium food to playful toys — we've got tails wagging across Bangladesh.</p>
           <div class="flex gap-3 mt-4">
-            <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-brand-500 inline-flex items-center justify-center transition"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-brand-500 inline-flex items-center justify-center transition"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-brand-500 inline-flex items-center justify-center transition"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-brand-500 inline-flex items-center justify-center transition"><i class="fab fa-youtube"></i></a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-brand-500 inline-flex items-center justify-center transition"><i class="fab fa-facebook-f text-lg"></i></a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-brand-500 inline-flex items-center justify-center transition"><i class="fab fa-instagram text-lg"></i></a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-brand-500 inline-flex items-center justify-center transition"><i class="fab fa-twitter text-lg"></i></a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-brand-500 inline-flex items-center justify-center transition"><i class="fab fa-youtube text-lg"></i></a>
           </div>
         </div>
         <div>
-          <h5 class="font-display font-semibold text-white mb-3">Quick Links</h5>
-          <ul class="space-y-2 text-sm text-ink-200/70">
+          <h5 class="font-display text-base sm:text-lg font-semibold text-white mb-3">Quick Links</h5>
+          <ul class="space-y-2 text-sm sm:text-base text-ink-200/70">
             <li><a class="hover:text-brand-400" href="{% url 'store:home' %}">Home</a></li>
             <li><a class="hover:text-brand-400" href="#">About Us</a></li>
             <li><a class="hover:text-brand-400" href="#">Contact</a></li>
@@ -300,8 +302,8 @@
           </ul>
         </div>
         <div>
-          <h5 class="font-display font-semibold text-white mb-3">Contact</h5>
-          <ul class="space-y-2 text-sm text-ink-200/70">
+          <h5 class="font-display text-base sm:text-lg font-semibold text-white mb-3">Contact</h5>
+          <ul class="space-y-2 text-sm sm:text-base text-ink-200/70">
             <li><i class="fas fa-map-marker-alt w-4 text-brand-400"></i> 123 Pet Street, Dhaka</li>
             <li><i class="fas fa-phone w-4 text-brand-400"></i> +880 1234 567890</li>
             <li><i class="fas fa-envelope w-4 text-brand-400"></i> info@ameaozon.com</li>
@@ -309,7 +311,7 @@
         </div>
       </div>
       <div class="border-t border-white/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 text-center text-xs text-ink-200/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 text-center text-xs sm:text-sm text-ink-200/50">
           &copy; {% now "Y" %} Ameaozon Pet Shop. Crafted with care for pet lovers.
         </div>
       </div>
