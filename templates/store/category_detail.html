@@ -13,7 +13,7 @@
   </nav>
 
   <!-- Category Header -->
-  <div class="mb-10" data-aos="fade-up">
+  <div class="mb-10">
     <div class="flex items-center gap-5">
       {% if category.image %}
       <div class="w-20 h-20 shrink-0 rounded-2xl overflow-hidden ring-1 ring-ink-100 shadow-card bg-ink-100">
@@ -40,7 +40,7 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
       {% for subcategory in subcategories %}
       <a href="{% url 'store:subcategory_detail' category.slug subcategory.slug %}"
-         data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:'50' }}"
+        
          class="group relative aspect-[4/3] overflow-hidden rounded-2xl shadow-card ring-1 ring-ink-100">
         {% if subcategory.image %}
           <img src="{{ subcategory.image.url }}" alt="{{ subcategory.name }}" class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-110">
@@ -77,7 +77,7 @@
 
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
       {% for product in products %}
-      <div data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'50' }}"
+      <div
            class="group relative bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden flex flex-col transition hover:-translate-y-1 hover:shadow-glow">
         <a href="{% url 'store:product_detail' product.slug %}" class="block relative aspect-square overflow-hidden bg-ink-100">
           {% if product.image %}

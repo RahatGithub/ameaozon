@@ -13,7 +13,7 @@
   </nav>
 
   <!-- Header -->
-  <div class="mb-8" data-aos="fade-up">
+  <div class="mb-8">
     <p class="text-xs font-semibold uppercase tracking-wider text-brand-600">Saved items</p>
     <h1 class="font-display text-3xl sm:text-4xl font-extrabold text-ink-900">My Wishlist</h1>
     {% if products %}
@@ -24,7 +24,7 @@
   {% if products %}
   <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
     {% for product in products %}
-    <div data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'50' }}"
+    <div
          class="group relative bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden flex flex-col transition hover:-translate-y-1 hover:shadow-glow">
       <a href="{% url 'store:product_detail' product.slug %}" class="block relative aspect-square overflow-hidden bg-ink-100">
         {% if product.image %}
@@ -83,7 +83,7 @@
     {% endfor %}
   </div>
   {% else %}
-  <div class="bg-white rounded-3xl ring-1 ring-ink-100 shadow-card text-center py-20 px-6" data-aos="fade-up">
+  <div class="bg-white rounded-3xl ring-1 ring-ink-100 shadow-card text-center py-20 px-6">
     <div class="mx-auto w-20 h-20 rounded-full bg-rose-50 text-rose-400 inline-flex items-center justify-center mb-4">
       <i class="far fa-heart text-3xl"></i>
     </div>

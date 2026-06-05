@@ -6,7 +6,7 @@
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
   <!-- Progress -->
-  <div class="mb-8 flex items-center justify-center gap-2 text-xs font-medium text-ink-500" data-aos="fade-up">
+  <div class="mb-8 flex items-center justify-center gap-2 text-xs font-medium text-ink-500">
     <span class="inline-flex w-7 h-7 rounded-full bg-brand-100 text-brand-600 items-center justify-center font-bold">1</span> Cart
     <span class="w-8 h-px bg-brand-300"></span>
     <span class="inline-flex w-7 h-7 rounded-full bg-brand-100 text-brand-600 items-center justify-center font-bold">2</span> Checkout
@@ -15,13 +15,13 @@
   </div>
 
   <!-- Header -->
-  <div class="mb-8 text-center" data-aos="fade-up">
+  <div class="mb-8 text-center">
     <p class="text-xs font-semibold uppercase tracking-wider text-brand-600">Complete your purchase</p>
     <h1 class="font-display text-3xl sm:text-4xl font-extrabold text-ink-900">Payment</h1>
   </div>
 
   <!-- Order Info Banner -->
-  <div class="bg-brand-50 border border-brand-100 rounded-2xl p-5 mb-6 flex flex-wrap items-center justify-between gap-4" data-aos="fade-up" data-aos-delay="50">
+  <div class="bg-brand-50 border border-brand-100 rounded-2xl p-5 mb-6 flex flex-wrap items-center justify-between gap-4">
     <div>
       <p class="text-sm text-ink-700">Order <span class="font-display font-bold text-ink-900">#{{ order.tracking_number }}</span></p>
       <p class="text-xs text-ink-500 mt-0.5">{{ payment_method }}</p>
@@ -30,7 +30,7 @@
   </div>
 
   <!-- Payment Forms -->
-  <div data-aos="fade-up" data-aos-delay="100">
+  <div>
 
     {% if order.payment_method == 'bkash' %}
     <div class="bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden">

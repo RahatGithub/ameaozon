@@ -13,7 +13,7 @@
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-8 sm:pb-12">
     <div class="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
-      <div data-aos="fade-up" class="order-2 lg:order-1">
+      <div class="order-2 lg:order-1">
         <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-semibold uppercase tracking-wide">
           <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
           New arrivals every week
@@ -48,7 +48,7 @@
       </div>
 
       <!-- Carousel card -->
-      <div data-aos="fade-up" class="relative order-1 lg:order-2">
+      <div class="relative order-1 lg:order-2">
         <div class="swiper hero-swiper rounded-3xl overflow-hidden shadow-card ring-1 ring-ink-100">
           <div class="swiper-wrapper">
             {% for slide in carousel_images %}
@@ -116,7 +116,7 @@
       <div class="swiper-wrapper">
         {% for category in categories %}
         <div class="swiper-slide">
-          <a href="{% url 'store:category_detail' category.slug %}" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:'50' }}"
+          <a href="{% url 'store:category_detail' category.slug %}"
              class="group relative aspect-[4/3] overflow-hidden rounded-2xl shadow-card ring-1 ring-ink-100 block">
             {% if category.image %}
               <img src="{{ category.image.url }}" alt="{{ category.name }}" class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-110">
@@ -155,7 +155,7 @@
 
   <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
     {% for product in featured_products %}
-    <div data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'25' }}"
+    <div
          class="group relative bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden flex flex-col transition hover:-translate-y-1 hover:shadow-glow">
       <a href="{% url 'store:product_detail' product.slug %}" class="block relative aspect-square overflow-hidden bg-ink-100">
         {% if product.image %}
