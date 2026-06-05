@@ -269,7 +269,7 @@
   {% if related_products %}
   <section class="mt-14">
     <h3 class="font-display text-2xl font-bold text-ink-900 mb-6">You might also like</h3>
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
       {% for related in related_products %}
       <div class="group relative bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden flex flex-col transition hover:-translate-y-1 hover:shadow-glow">
         <a href="{% url 'store:product_detail' related.slug %}" class="block relative aspect-square overflow-hidden bg-ink-100">
