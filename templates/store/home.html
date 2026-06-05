@@ -155,7 +155,7 @@
 
   <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
     {% for product in featured_products %}
-    <div data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'50' }}"
+    <div data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'25' }}"
          class="group relative bg-white rounded-2xl ring-1 ring-ink-100 shadow-card overflow-hidden flex flex-col transition hover:-translate-y-1 hover:shadow-glow">
       <a href="{% url 'store:product_detail' product.slug %}" class="block relative aspect-square overflow-hidden bg-ink-100">
         {% if product.image %}
